@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Claude Prompt Builder — for Max</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1f232c;
+    --border: #2a2f3a;
+    --text: #e8ecf1;
+    --muted: #9aa3b2;
+    --accent: #c96442;
+    --accent-2: #e07a5c;
+    --ok: #4ade80;
+    --chip: #232832;
+    --chip-active: #c96442;
+    --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+  body.light {
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --panel-2: #f0f2f6;
+    --border: #dfe3ea;
+    --text: #1a1d23;
+    --muted: #5b6474;
+    --accent: #c96442;
+    --accent-2: #a94f32;
+    --ok: #16a34a;
+    --chip: #eef1f5;
+    --chip-active: #c96442;
+    --shadow: 0 6px 18px rgba(20,24,40,0.08);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+  }
+  header h1 {
+    font-size: 22px; margin: 0; font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+  }
+  header h1 .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent); display: inline-block;
+  }
+  header .sub { color: var(--muted); font-size: 13px; }
+  header .controls { display: flex; gap: 8px; align-items: center; }
+  .toggle {
+    display: inline-flex; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+  }
+  .toggle button {
+    padding: 8px 14px; background: transparent; color: var(--text);
+    border: none; cursor: pointer; font-size: 13px; font-weight: 500;
+  }
+  .toggle button.active {
+    background: var(--accent); color: white;
+  }
+  .icon-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  .icon-btn:hover { background: var(--panel-2); }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .panel h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); margin: 0 0 14px 0; font-weight: 600;
+  }
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px;
+    color: var(--text);
+  }
+  .field .hint {
+    display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px;
+  }
+  select, input[type="text"], textarea {
+    width: 100%;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  select:focus, input:focus, textarea:focus { border-color: var(--accent); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    padding: 6px 10px; background: var(--chip); color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px; font-size: 12px; cursor: pointer;
+    user-select: none; transition: all 0.15s;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip.active {
+    background: var(--chip-active); color: white; border-color: var(--chip-active);
+  }
+  .section-divider {
+    height: 1px; background: var(--border); margin: 18px 0;
+  }
+  .preview-wrap {
+    position: sticky; top: 20px;
+  }
+  .preview {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: "SF Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    min-height: 300px;
+    max-height: 65vh;
+    overflow-y: auto;
+    line-height: 1.55;
+  }
+  .preview-actions {
+    display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--accent); color: white;
+  }
+  .btn-primary:hover { background: var(--accent-2); }
+  .btn-secondary {
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--panel-2); }
+  .footer-note {
+    color: var(--muted); font-size: 12px; margin-top: 14px;
+  }
+  .templates-bar {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .templates-bar select {
+    flex: 1; min-width: 180px;
+  }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--ok); color: #0a0c10; padding: 10px 18px;
+    border-radius: 999px; font-weight: 500; font-size: 13px;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .toast.show { opacity: 1; }
+  .pill {
+    display: inline-block; padding: 2px 8px;
+    background: var(--chip); border-radius: 999px;
+    font-size: 11px; color: var(--muted); margin-left: 6px;
+  }
+  details {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 16px;
+  }
+  details summary {
+    cursor: pointer; font-weight: 500; font-size: 13px;
+    color: var(--muted);
+  }
+  details[open] summary { margin-bottom: 10px; color: var(--text); }
+  .count {
+    font-size: 11px; color: var(--muted); float: right;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1><span class="dot"></span> Claude Prompt Builder</h1>
+      <div class="sub">A prompt scaffolder for marketing work (and life) — built for Max</div>
+    </div>
+    <div class="controls">
+      <div class="toggle" id="modeToggle">
+        <button data-mode="work" class="active">Work</button>
+        <button data-mode="personal">Personal</button>
+      </div>
+      <button class="icon-btn" id="themeToggle" title="Toggle light/dark">Theme</button>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- LEFT: FORM -->
+    <div class="panel">
+
+      <div class="templates-bar">
+        <select id="templateSelect">
+          <option value="">— Load a template —</option>
+        </select>
+        <button class="btn btn-secondary" id="saveTemplateBtn">Save current as template</button>
+        <button class="btn btn-secondary" id="deleteTemplateBtn">Delete</button>
+      </div>
+
+      <h2>1. Role — "You are a…"</h2>
+      <div class="field">
+        <label for="role">Persona Claude should adopt</label>
+        <select id="role"></select>
+      </div>
+      <div class="field">
+        <label for="roleCustom">Or customise the role (optional)</label>
+        <input type="text" id="roleCustom" placeholder="e.g. a senior e-commerce CMO with 15 years of brand and performance marketing experience" />
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>2. Task — What do you need?</h2>
+      <div class="row">
+        <div class="field">
+          <label for="taskType">Task type</label>
+          <select id="taskType"></select>
+        </div>
+        <div class="field">
+          <label for="outputFormat">Desired output</label>
+          <select id="outputFormat"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="topic">Topic / subject <span class="pill">required</span></label>
+        <textarea id="topic" placeholder="e.g. Spring campaign for our new product range targeting UK e-commerce shoppers aged 25–40"></textarea>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>3. Audience & Tone</h2>
+      <div class="row">
+        <div class="field">
+          <label for="audience">Target audience</label>
+          <select id="audience"></select>
+        </div>
+        <div class="field">
+          <label for="audienceCustom">Audience detail (optional)</label>
+          <input type="text" id="audienceCustom" placeholder="e.g. UK-based female shoppers, 25–40, interested in sustainable fashion" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Tone <span class="hint">Pick up to 3</span></label>
+        <div class="chips" id="toneChips"></div>
+      </div>
+      <div class="field">
+        <label>Style & voice <span class="hint">Pick up to 3</span></label>
+        <div class="chips" id="styleChips"></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>4. Structure</h2>
+      <div class="row">
+        <div class="field">
+          <label for="length">Length</label>
+          <select id="length"></select>
+        </div>
+        <div class="field">
+          <label for="structure">Structure</label>
+          <select id="structure"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="language">Output language</label>
+        <select id="language">
+          <option>English (UK)</option>
+          <option>English (US)</option>
+          <option>Spanish</option>
+          <option>French</option>
+          <option>German</option>
+          <option>Portuguese</option>
+          <option>Italian</option>
+          <option>Dutch</option>
+          <option>Japanese</option>
+          <option>Chinese (Simplified)</option>
+        </select>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>5. Context & Details</h2>
+      <div class="field">
+        <label for="context">Background context <span class="hint">Give Claude the "why" — company, product, market, prior work, etc.</span></label>
+        <textarea id="context" placeholder="e.g. We are a mid-market e-commerce brand in the UK home & lifestyle space. Our customers are 25–45, shop mostly on mobile, and value design, sustainability and fast delivery. Our edge is curated product and strong brand storytelling..."></textarea>
+      </div>
+      <div class="field">
+        <label for="goal">Goal / success criteria <span class="hint">What does "good" look like?</span></label>
+        <textarea id="goal" placeholder="e.g. A campaign narrative I can present to the exec team that clearly ties to Q3 revenue and new-customer-acquisition targets."></textarea>
+      </div>
+
+      <details>
+        <summary>Advanced — examples, constraints, step-by-step, etc.</summary>
+        <div class="field" style="margin-top:10px;">
+          <label for="examples">Examples to follow <span class="hint">Paste any reference copy, past campaigns, or "like this…" examples</span></label>
+          <textarea id="examples" placeholder="e.g. Follow the tone of our last spring campaign email: …"></textarea>
+        </div>
+        <div class="field">
+          <label for="constraints">Constraints / things to avoid</label>
+          <textarea id="constraints" placeholder="e.g. No buzzwords like 'synergy' or 'unlock'. Keep it on-brand. Avoid discounts or pricing claims."></textarea>
+        </div>
+        <div class="field">
+          <label>Reasoning mode</label>
+          <div class="chips" id="reasoningChips"></div>
+        </div>
+        <div class="field">
+          <label>Quality boosters</label>
+          <div class="chips" id="boostersChips"></div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- RIGHT: PREVIEW -->
+    <div>
+      <div class="preview-wrap panel">
+        <h2>Live prompt preview <span class="count" id="charCount">0 chars</span></h2>
+        <div class="preview" id="preview">Your prompt will appear here as you fill out the form.</div>
+        <div class="preview-actions">
+          <button class="btn btn-primary" id="copyBtn">Copy to clipboard</button>
+          <button class="btn btn-secondary" id="openClaudeBtn">Open Claude.ai</button>
+          <button class="btn btn-secondary" id="clearBtn">Clear all</button>
+          <button class="btn btn-secondary" id="downloadBtn">Download .txt</button>
+        </div>
+        <div class="footer-note" id="footerNote">
+          Tip: paste the prompt into claude.ai, the Claude desktop app, or Cowork. Templates are saved in your browser only.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+/* =========================================================
+   Option banks — customized for a Marketing Director / CMO
+   ========================================================= */
+const OPTIONS = {
+  work: {
+    roles: [
+      "— Select a role —",
+      "Senior marketing strategist",
+      "Chief Marketing Officer (CMO)",
+      "E-commerce marketing director",
+      "Demand generation expert",
+      "Brand strategist",
+      "Product marketing manager",
+      "Performance marketing lead (paid + SEO)",
+      "Content marketing director",
+      "Copywriter specialising in conversion copy",
+      "Marketing analytics expert",
+      "PR & communications director",
+      "Growth marketer at a high-growth e-commerce brand",
+      "Creative director",
+      "Social media strategist",
+      "Marketing ops / RevOps lead",
+      "Customer lifecycle / CRM marketer",
+      "Event marketing lead",
+      "SEO strategist",
+      "Email marketing expert",
+      "Marketing recruiter",
+      "Executive coach for marketing leaders",
+      "Board advisor / McKinsey-style consultant"
+    ],
+    tasks: [
+      "— Select a task —",
+      "Write", "Edit / improve", "Brainstorm", "Analyse", "Summarise",
+      "Critique / red-team", "Compare options", "Translate",
+      "Build a framework", "Create an outline", "Draft a plan",
+      "Answer a question", "Role-play a conversation", "Research"
+    ],
+    outputs: [
+      "— Select an output —",
+      "Campaign brief", "Go-to-market plan", "Positioning statement",
+      "Messaging framework", "Value proposition", "Tagline options",
+      "Email (single)", "Email sequence / nurture", "Cold outreach email",
+      "Blog post", "LinkedIn post", "Twitter/X thread",
+      "Press release", "PR pitch", "Executive memo",
+      "Slide outline (for a deck)", "Board update / CMO report",
+      "Landing page copy", "Ad copy (Google / Meta / LinkedIn)",
+      "Video script / VSL", "Webinar outline",
+      "Customer persona", "ICP definition", "Competitor analysis",
+      "SWOT analysis", "OKRs / KPIs", "Budget rationale",
+      "RFP response", "Agency brief", "Interview questions",
+      "Performance post-mortem", "Content calendar", "SEO brief"
+    ],
+    audiences: [
+      "— Select an audience —",
+      "External: prospective customers (ICP)",
+      "External: existing customers",
+      "External: lapsed / win-back customers",
+      "External: analysts / press",
+      "External: investors",
+      "External: agency / vendor partners",
+      "External: general public"
+    ]
+  },
+  personal: {
+    roles: [
+      "— Select a role —",
+      "Thoughtful friend who is great at writing",
+      "Personal coach",
+      "Financial planner (general guidance only)",
+      "Travel planner",
+      "Fitness & nutrition coach",
+      "Parenting coach",
+      "Relationship advisor",
+      "Creative writing partner",
+      "Socratic tutor",
+      "Career coach",
+      "Productivity coach (GTD / Deep Work style)",
+      "Meal planner / home chef",
+      "Home project planner / handyman advisor",
+      "Shopping assistant / product reviewer",
+      "Patient teacher explaining things simply",
+      "Debate partner / devil's advocate"
+    ],
+    tasks: [
+      "— Select a task —",
+      "Write", "Edit / improve", "Brainstorm", "Explain", "Summarise",
+      "Plan", "Decide between options", "Translate",
+      "Answer a question", "Role-play a conversation", "Research",
+      "Practise a conversation", "Give feedback"
+    ],
+    outputs: [
+      "— Select an output —",
+      "Personal email", "Text message / iMessage",
+      "Letter", "Thank-you note", "Birthday message",
+      "Journal prompt", "To-do list", "Weekly plan",
+      "Travel itinerary", "Packing list",
+      "Workout plan", "Meal plan", "Recipe",
+      "Shopping list", "Budget breakdown",
+      "Life decision framework", "Pros & cons list",
+      "Study notes", "Explanation (ELI5)",
+      "Story / creative piece", "Poem", "Speech / toast",
+      "Resume / CV section", "Cover letter", "LinkedIn summary"
+    ],
+    audiences: [
+      "— Select an audience —",
+      "Just me",
+      "Family member",
+      "Spouse / partner",
+      "Child (age-appropriate)",
+      "Friend",
+      "Colleague",
+      "Hiring manager / recruiter",
+      "Landlord / service provider",
+      "General / public"
+    ]
+  },
+  tones: [
+    "Professional","Conversational","Warm","Authoritative","Confident",
+    "Empathetic","Playful","Witty","Direct / no-fluff","Inspirational",
+    "Analytical","Urgent","Curious","Skeptical","Diplomatic"
+  ],
+  styles: [
+    "Concise","Detailed & thorough","Data-driven","Story-driven / narrative",
+    "Journalistic (AP style)","Academic","Plain English / grade 8 reading level",
+    "Executive / board-ready","Punchy ad copy","First person","Third person",
+    "Active voice","Benefit-led","Problem-solution","Feature-benefit"
+  ],
+  lengths: [
+    "Use your judgment",
+    "Very short (1–2 sentences)",
+    "Short (1 paragraph, ~50–100 words)",
+    "Medium (2–4 paragraphs, ~200–400 words)",
+    "Long (500–800 words)",
+    "Very long (1000+ words)",
+    "Tweet-length (under 280 chars)",
+    "LinkedIn-post length (~150–250 words)",
+    "Email length (~100–250 words)",
+    "One-pager"
+  ],
+  structures: [
+    "Use your judgment",
+    "Prose (no bullets/headers)",
+    "Bulleted list",
+    "Numbered list",
+    "Headings + short paragraphs",
+    "Table",
+    "Q&A format",
+    "Pros & cons",
+    "Before / after",
+    "Hook → body → CTA",
+    "Problem → agitate → solve (PAS)",
+    "AIDA (Attention–Interest–Desire–Action)",
+    "Situation → Complication → Question → Answer (SCQA)"
+  ],
+  reasoning: [
+    "Think step-by-step",
+    "Show your reasoning",
+    "Give me 3 options then recommend one",
+    "Ask clarifying questions first",
+    "Challenge my assumptions",
+    "Play devil's advocate"
+  ],
+  boosters: [
+    "Cite sources / be explicit about uncertainty",
+    "Flag anything you're unsure about",
+    "Use marketing data/frameworks where relevant",
+    "Include a short 'how to use this' note at the end",
+    "Offer 2 variations",
+    "Keep it copy-paste ready"
+  ]
+};
+
+/* =========================================================
+   State
+   ========================================================= */
+let state = {
+  mode: "work",
+  tones: [],
+  styles: [],
+  reasoning: [],
+  boosters: []
+};
+const MAX_CHIPS = { tone: 3, style: 3 };
+const STORAGE_KEY = "cpb_templates_v2";
+const THEME_KEY = "cpb_theme_v1";
+
+/* =========================================================
+   Helpers
+   ========================================================= */
+function el(id){ return document.getElementById(id); }
+function fillSelect(selectId, arr){
+  const s = el(selectId); s.innerHTML = "";
+  arr.forEach(v => { const o = document.createElement("option"); o.textContent = v; s.appendChild(o); });
+}
+function buildChips(containerId, arr, stateKey, limitKey){
+  const c = el(containerId); c.innerHTML = "";
+  arr.forEach(v => {
+    const chip = document.createElement("span");
+    chip.className = "chip"; chip.textContent = v;
+    chip.addEventListener("click", () => {
+      const idx = state[stateKey].indexOf(v);
+      if (idx >= 0) { state[stateKey].splice(idx,1); chip.classList.remove("active"); }
+      else {
+        const limit = limitKey ? MAX_CHIPS[limitKey] : Infinity;
+        if (state[stateKey].length >= limit) return;
+        state[stateKey].push(v); chip.classList.add("active");
+      }
+      updatePreview();
+    });
+    c.appendChild(chip);
+  });
+}
+
+/* =========================================================
+   Init UI
+   ========================================================= */
+function populateModeOptions() {
+  const m = OPTIONS[state.mode];
+  fillSelect("role", m.roles);
+  fillSelect("taskType", m.tasks);
+  fillSelect("outputFormat", m.outputs);
+  fillSelect("audience", m.audiences);
+}
+function initUI() {
+  populateModeOptions();
+  fillSelect("length", OPTIONS.lengths);
+  fillSelect("structure", OPTIONS.structures);
+  buildChips("toneChips", OPTIONS.tones, "tones", "tone");
+  buildChips("styleChips", OPTIONS.styles, "styles", "style");
+  buildChips("reasoningChips", OPTIONS.reasoning, "reasoning");
+  buildChips("boostersChips", OPTIONS.boosters, "boosters");
+}
+
+/* =========================================================
+   Preview generation
+   ========================================================= */
+function val(id){ return el(id).value.trim(); }
+function isDefault(v){ return !v || v.startsWith("— "); }
+
+function buildPrompt(){
+  const parts = [];
+
+  // Role
+  const role = val("role");
+  const roleCustom = val("roleCustom");
+  if (!isDefault(role) || roleCustom) {
+    let roleLine;
+    if (roleCustom) roleLine = `You are ${roleCustom}.`;
+    else roleLine = `You are a ${role.toLowerCase()}.`;
+    parts.push(`# Role\n${roleLine}`);
+  }
+
+  // Task & topic
+  const task = val("taskType");
+  const output = val("outputFormat");
+  const topic = val("topic");
+  const taskLines = [];
+  if (!isDefault(task) || !isDefault(output) || topic) {
+    let line = "";
+    if (!isDefault(task) && !isDefault(output)) {
+      line = `${task} a ${output.toLowerCase()}`;
+    } else if (!isDefault(task)) {
+      line = `${task}`;
+    } else if (!isDefault(output)) {
+      line = `Produce a ${output.toLowerCase()}`;
+    }
+    if (topic) line += line ? ` about:\n${topic}` : `Topic:\n${topic}`;
+    taskLines.push(line);
+    parts.push(`# Task\n${taskLines.join("\n")}`);
+  }
+
+  // Audience
+  const audience = val("audience");
+  const audienceCustom = val("audienceCustom");
+  if (!isDefault(audience) || audienceCustom) {
+    let a = "";
+    if (!isDefault(audience)) a += audience;
+    if (audienceCustom) a += (a ? " — " : "") + audienceCustom;
+    parts.push(`# Audience\n${a}`);
+  }
+
+  // Tone & style
+  const toneStyleLines = [];
+  if (state.tones.length) toneStyleLines.push(`Tone: ${state.tones.join(", ")}.`);
+  if (state.styles.length) toneStyleLines.push(`Style: ${state.styles.join(", ")}.`);
+  if (toneStyleLines.length) parts.push(`# Tone & Style\n${toneStyleLines.join("\n")}`);
+
+  // Structure
+  const length = val("length");
+  const structure = val("structure");
+  const language = val("language");
+  const structLines = [];
+  if (!isDefault(length) && length !== "Use your judgment") structLines.push(`Length: ${length}.`);
+  if (!isDefault(structure) && structure !== "Use your judgment") structLines.push(`Structure: ${structure}.`);
+  if (language && language !== "English (UK)") structLines.push(`Language: ${language}.`);
+  if (structLines.length) parts.push(`# Format\n${structLines.join("\n")}`);
+
+  // Context & Goal
+  const context = val("context");
+  if (context) parts.push(`# Context\n${context}`);
+  const goal = val("goal");
+  if (goal) parts.push(`# Goal\n${goal}`);
+
+  // Advanced
+  const examples = val("examples");
+  if (examples) parts.push(`# Examples to follow\n${examples}`);
+  const constraints = val("constraints");
+  if (constraints) parts.push(`# Constraints\n${constraints}`);
+
+  const extras = [];
+  if (state.reasoning.length) extras.push(...state.reasoning.map(r => "- " + r));
+  if (state.boosters.length) extras.push(...state.boosters.map(b => "- " + b));
+  if (extras.length) parts.push(`# Instructions\n${extras.join("\n")}`);
+
+  // Mode flavoring
+  if (parts.length === 0) {
+    return "Your prompt will appear here as you fill out the form.";
+  }
+
+  // Closing nudge
+  const closing = state.mode === "work"
+    ? "Please produce the output now. If anything above is ambiguous, ask me one clarifying question before proceeding."
+    : "Please produce the output now. Keep it friendly and practical. Ask me a clarifying question if anything is unclear.";
+  parts.push(closing);
+
+  return parts.join("\n\n");
+}
+
+function updatePreview(){
+  const text = buildPrompt();
+  el("preview").textContent = text;
+  el("charCount").textContent = text.length + " chars";
+}
+
+/* =========================================================
+   Events
+   ========================================================= */
+function wireInputs(){
+  ["role","roleCustom","taskType","outputFormat","topic","audience","audienceCustom",
+   "length","structure","language","context","goal","examples","constraints"]
+  .forEach(id => {
+    el(id).addEventListener("input", updatePreview);
+    el(id).addEventListener("change", updatePreview);
+  });
+}
+
+function wireMode(){
+  document.querySelectorAll("#modeToggle button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#modeToggle button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.mode = btn.dataset.mode;
+      populateModeOptions();
+      updatePreview();
+    });
+  });
+}
+
+function toast(msg){
+  const t = el("toast"); t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1500);
+}
+
+function wireActions(){
+  el("copyBtn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(el("preview").textContent);
+      toast("Copied to clipboard");
+    } catch { toast("Copy failed — select manually"); }
+  });
+  el("openClaudeBtn").addEventListener("click", () => {
+    window.open("https://claude.ai/new", "_blank");
+  });
+  el("clearBtn").addEventListener("click", () => {
+    if (!confirm("Clear the whole form?")) return;
+    document.querySelectorAll("input[type=text], textarea").forEach(i => i.value = "");
+    document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
+    state.tones = []; state.styles = []; state.reasoning = []; state.boosters = [];
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    updatePreview();
+  });
+  el("downloadBtn").addEventListener("click", () => {
+    const text = el("preview").textContent;
+    const blob = new Blob([text], {type: "text/plain"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "claude-prompt.txt"; a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+/* =========================================================
+   Templates (localStorage)
+   ========================================================= */
+function getTemplates(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+  catch { return {}; }
+}
+function saveTemplates(t){ localStorage.setItem(STORAGE_KEY, JSON.stringify(t)); }
+function refreshTemplateSelect(){
+  const sel = el("templateSelect");
+  const templates = getTemplates();
+  sel.innerHTML = '<option value="">— Load a template —</option>';
+  Object.keys(templates).sort().forEach(name => {
+    const o = document.createElement("option"); o.value = name; o.textContent = name;
+    sel.appendChild(o);
+  });
+}
+function currentSnapshot(){
+  return {
+    mode: state.mode,
+    inputs: {
+      role: el("role").value, roleCustom: el("roleCustom").value,
+      taskType: el("taskType").value, outputFormat: el("outputFormat").value,
+      topic: el("topic").value,
+      audience: el("audience").value, audienceCustom: el("audienceCustom").value,
+      length: el("length").value, structure: el("structure").value, language: el("language").value,
+      context: el("context").value, goal: el("goal").value,
+      examples: el("examples").value, constraints: el("constraints").value
+    },
+    chips: {
+      tones: [...state.tones], styles: [...state.styles],
+      reasoning: [...state.reasoning], boosters: [...state.boosters]
+    }
+  };
+}
+function applySnapshot(snap){
+  // mode
+  state.mode = snap.mode || "work";
+  document.querySelectorAll("#modeToggle button").forEach(b => {
+    b.classList.toggle("active", b.dataset.mode === state.mode);
+  });
+  populateModeOptions();
+  // inputs
+  Object.entries(snap.inputs || {}).forEach(([k,v]) => {
+    if (el(k)) el(k).value = v;
+  });
+  // chips
+  state.tones = [...(snap.chips?.tones || [])];
+  state.styles = [...(snap.chips?.styles || [])];
+  state.reasoning = [...(snap.chips?.reasoning || [])];
+  state.boosters = [...(snap.chips?.boosters || [])];
+  // refresh chip active state
+  document.querySelectorAll("#toneChips .chip").forEach(c => c.classList.toggle("active", state.tones.includes(c.textContent)));
+  document.querySelectorAll("#styleChips .chip").forEach(c => c.classList.toggle("active", state.styles.includes(c.textContent)));
+  document.querySelectorAll("#reasoningChips .chip").forEach(c => c.classList.toggle("active", state.reasoning.includes(c.textContent)));
+  document.querySelectorAll("#boostersChips .chip").forEach(c => c.classList.toggle("active", state.boosters.includes(c.textContent)));
+  updatePreview();
+}
+function wireTemplates(){
+  el("saveTemplateBtn").addEventListener("click", () => {
+    const name = prompt("Template name?");
+    if (!name) return;
+    const t = getTemplates();
+    t[name] = currentSnapshot();
+    saveTemplates(t);
+    refreshTemplateSelect();
+    el("templateSelect").value = name;
+    toast("Template saved");
+  });
+  el("deleteTemplateBtn").addEventListener("click", () => {
+    const name = el("templateSelect").value;
+    if (!name) return toast("Select a template first");
+    if (!confirm("Delete template '"+name+"'?")) return;
+    const t = getTemplates(); delete t[name]; saveTemplates(t);
+    refreshTemplateSelect(); toast("Deleted");
+  });
+  el("templateSelect").addEventListener("change", e => {
+    const name = e.target.value; if (!name) return;
+    const t = getTemplates();
+    if (t[name]) applySnapshot(t[name]);
+  });
+}
+
+/* =========================================================
+   Starter templates (seeded on first load)
+   ========================================================= */
+function seedStartersIfEmpty(){
+  const t = getTemplates();
+  if (Object.keys(t).length > 0) return;
+
+  t["[Work] Campaign brief — new product launch"] = {
+    mode: "work",
+    inputs: {
+      role: "Senior marketing strategist", roleCustom: "",
+      taskType: "Write", outputFormat: "Campaign brief",
+      topic: "Launch campaign for our new e-commerce product range. Replace with product, target shopper, season and timing.",
+      audience: "External: prospective customers (ICP)", audienceCustom: "",
+      length: "One-pager", structure: "Headings + short paragraphs", language: "English (UK)",
+      context: "Brand, product, category, customer insight, competitive edge and prior campaign learnings — fill in.",
+      goal: "A campaign brief I can hand to the team and agency to kick off execution.",
+      examples: "", constraints: "No generic buzzwords. Tie everything back to revenue and customer acquisition impact."
+    },
+    chips: { tones: ["Confident","Direct / no-fluff"], styles: ["Executive / board-ready","Benefit-led"], reasoning: ["Give me 3 options then recommend one"], boosters: ["Keep it copy-paste ready"] }
+  };
+
+  t["[Work] Board / exec update"] = {
+    mode: "work",
+    inputs: {
+      role: "Chief Marketing Officer (CMO)", roleCustom: "",
+      taskType: "Summarise", outputFormat: "Board update / CMO report",
+      topic: "Monthly marketing performance update covering revenue, spend, campaigns, and headline risks.",
+      audience: "", audienceCustom: "Executive team / board",
+      length: "One-pager", structure: "Headings + short paragraphs", language: "English (UK)",
+      context: "Paste MoM metrics here: revenue, new vs returning customers, CAC, ROAS, budget pacing, top wins, top risks.",
+      goal: "A concise exec-ready update that frames results, flags risks, and requests decisions.",
+      examples: "", constraints: "Lead with the bottom line. Max 1 page. No jargon."
+    },
+    chips: { tones: ["Confident","Analytical","Direct / no-fluff"], styles: ["Executive / board-ready","Data-driven"], reasoning: ["Flag anything you're unsure about"], boosters: ["Include a short 'how to use this' note at the end"] }
+  };
+
+  t["[Work] LinkedIn thought-leadership post"] = {
+    mode: "work",
+    inputs: {
+      role: "Chief Marketing Officer (CMO)", roleCustom: "",
+      taskType: "Write", outputFormat: "LinkedIn post",
+      topic: "Share a contrarian take on a current trend in marketing or e-commerce — swap in the trend.",
+      audience: "", audienceCustom: "Marketing & growth leaders on LinkedIn",
+      length: "LinkedIn-post length (~150–250 words)", structure: "Hook → body → CTA", language: "English (UK)",
+      context: "My POV: …  Evidence: …  I want comments and discussion, not just likes.",
+      goal: "A post that reads like me, sparks discussion, and positions me as a sharp marketing operator.",
+      examples: "", constraints: "No emojis. No 'Exciting news!'. First line must earn the second."
+    },
+    chips: { tones: ["Confident","Direct / no-fluff","Curious"], styles: ["Punchy ad copy","First person","Story-driven / narrative"], reasoning: [], boosters: ["Offer 2 variations"] }
+  };
+
+  t["[Personal] Plan my week"] = {
+    mode: "personal",
+    inputs: {
+      role: "Productivity coach (GTD / Deep Work style)", roleCustom: "",
+      taskType: "Plan", outputFormat: "Weekly plan",
+      topic: "Help me plan the next 7 days. I'll list my priorities, meetings, and energy constraints.",
+      audience: "Just me", audienceCustom: "",
+      length: "Medium (2–4 paragraphs, ~200–400 words)", structure: "Headings + short paragraphs", language: "English (UK)",
+      context: "Priorities this week: …  Non-negotiables: …  Family commitments: …  Energy: I'm sharper in mornings.",
+      goal: "A realistic, low-friction weekly plan that protects deep work and family time.",
+      examples: "", constraints: "Don't overschedule. Build in buffer."
+    },
+    chips: { tones: ["Warm","Direct / no-fluff"], styles: ["Concise","Plain English / grade 8 reading level"], reasoning: ["Ask clarifying questions first"], boosters: [] }
+  };
+
+  t["[Personal] Draft a tricky email"] = {
+    mode: "personal",
+    inputs: {
+      role: "Thoughtful friend who is great at writing", roleCustom: "",
+      taskType: "Write", outputFormat: "Personal email",
+      topic: "I need to send a difficult email — describe the situation, the recipient, and the outcome you want.",
+      audience: "Friend", audienceCustom: "",
+      length: "Short (1 paragraph, ~50–100 words)", structure: "Prose (no bullets/headers)", language: "English (UK)",
+      context: "Relationship context, history, tone they'll expect from me.",
+      goal: "An email that is honest, kind, and moves the situation forward.",
+      examples: "", constraints: "Don't sound cold. Don't over-apologise."
+    },
+    chips: { tones: ["Empathetic","Warm","Diplomatic"], styles: ["Plain English / grade 8 reading level","First person"], reasoning: [], boosters: ["Offer 2 variations"] }
+  };
+
+  saveTemplates(t);
+}
+
+/* =========================================================
+   Theme
+   ========================================================= */
+function wireTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === "light") document.body.classList.add("light");
+  el("themeToggle").addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    localStorage.setItem(THEME_KEY, document.body.classList.contains("light") ? "light" : "dark");
+  });
+}
+
+/* =========================================================
+   Go!
+   ========================================================= */
+initUI();
+wireInputs();
+wireMode();
+wireActions();
+wireTheme();
+seedStartersIfEmpty();
+refreshTemplateSelect();
+updatePreview();
+</script>
+</body>
+</html>
