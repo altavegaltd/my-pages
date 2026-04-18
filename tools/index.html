@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tools — Max Cartwright-Wilson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Brand palette */
+    --olive-deep:#2E3A21;
+    --olive:#4A5739;
+    --moss:#6C7556;
+    --sage:#A9AE94;
+    --cognac:#8A5A3B;
+    --tan:#B69874;
+    --beige:#D9C9B0;
+    --stone:#E8E1D3;
+    --paper:#F4F1EA;
+    --bone:#EDE8DC;
+    --graphite:#1C1E1A;
+    --ink:#11130F;
+
+    /* Semantic — Paper (default) */
+    --bg:var(--paper);
+    --surface:#ffffff;
+    --surface-2:var(--bone);
+    --border:rgba(17,19,15,0.10);
+    --border-strong:rgba(17,19,15,0.18);
+    --text:var(--ink);
+    --text-2:#2A2D26;
+    --muted:#5B6054;
+    --accent:var(--olive-deep);
+    --accent-2:var(--olive);
+    --earth:var(--cognac);
+    --shadow:0 4px 14px rgba(17,19,15,0.06);
+
+    --radius:2px;
+    --sans:'Inter Tight','Inter',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+    --body:'Inter',system-ui,-apple-system,sans-serif;
+    --serif:'Fraunces',Georgia,serif;
+  }
+  body.dark{
+    --bg:var(--ink);
+    --surface:var(--graphite);
+    --surface-2:#262922;
+    --border:rgba(244,241,234,0.10);
+    --border-strong:rgba(244,241,234,0.20);
+    --text:var(--paper);
+    --text-2:rgba(244,241,234,0.82);
+    --muted:rgba(244,241,234,0.58);
+    --accent:var(--sage);
+    --accent-2:var(--moss);
+    --earth:var(--tan);
+    --shadow:0 10px 30px rgba(0,0,0,0.45);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:15px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    font-feature-settings:"ss01","cv11";
+    min-height:100vh;
+  }
+
+  .wrap{max-width:1200px;margin:0 auto;padding:56px 40px 80px}
+  @media (max-width:700px){.wrap{padding:40px 22px 60px}}
+
+  /* ---------- Top nav ---------- */
+  .topnav{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:36px;gap:16px;flex-wrap:wrap;
+  }
+  .backlink{
+    font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);text-decoration:none;font-weight:500;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:color .15s;
+  }
+  .backlink:hover{color:var(--accent)}
+  .backlink .arrow{font-family:var(--body);letter-spacing:0;font-size:14px}
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;flex-wrap:wrap;margin-bottom:44px;
+  }
+  .title-block{max-width:640px}
+  .eyebrow{
+    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow .mark{
+    display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:1px;
+  }
+  h1{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(40px,6vw,68px);line-height:.98;letter-spacing:-.03em;
+    color:var(--text);margin:0 0 14px;
+  }
+  .sub{color:var(--text-2);font-size:17px;line-height:1.5;margin:0;max-width:56ch}
+  .controls{display:flex;gap:8px;align-items:center}
+
+  /* ---------- Buttons ---------- */
+  .icon-btn{
+    background:transparent;border:1px solid var(--border-strong);color:var(--text);
+    padding:9px 14px;border-radius:var(--radius);cursor:pointer;
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    transition:border-color .15s,background .15s;
+  }
+  .icon-btn:hover{border-color:var(--accent);background:var(--surface)}
+  body.dark .icon-btn:hover{background:var(--surface-2)}
+
+  /* ---------- Filter bar ---------- */
+  .filter-bar{
+    display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+    margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);
+  }
+  .search{flex:1;min-width:240px;position:relative}
+  .search input{
+    width:100%;background:var(--surface);color:var(--text);
+    border:1px solid var(--border-strong);border-radius:var(--radius);
+    padding:11px 14px;font-size:14px;font-family:var(--body);outline:none;
+    transition:border-color .15s;
+  }
+  .search input::placeholder{color:var(--muted)}
+  .search input:focus{border-color:var(--accent)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{
+    padding:6px 12px;background:transparent;color:var(--text-2);
+    border:1px solid var(--border-strong);border-radius:var(--radius);
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    cursor:pointer;user-select:none;transition:all .15s;
+  }
+  .chip:hover{border-color:var(--accent);color:var(--text)}
+  .chip.active{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+  body.dark .chip.active{color:var(--ink)}
+
+  /* ---------- Grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:1px;background:var(--border);
+    border:1px solid var(--border);
+  }
+  .card{
+    background:var(--surface);
+    padding:26px 24px 22px;
+    display:flex;flex-direction:column;
+    text-decoration:none;color:var(--text);
+    min-height:200px;position:relative;
+    transition:background .15s;
+  }
+  .card:hover{background:var(--surface-2)}
+  .card-emoji{
+    font-size:22px;margin-bottom:18px;
+    width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);
+  }
+  body.dark .card-emoji{background:var(--bg)}
+  .card h3{
+    font-family:var(--sans);font-weight:600;font-size:18px;letter-spacing:-.015em;
+    margin:0 0 8px;color:var(--text);
+  }
+  .card p{
+    margin:0;color:var(--text-2);font-size:14px;line-height:1.5;flex:1;
+  }
+  .card-footer{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-top:18px;gap:12px;
+  }
+  .tags{display:flex;gap:4px;flex-wrap:wrap}
+  .tag{
+    font-family:var(--sans);font-size:10px;text-transform:uppercase;letter-spacing:.14em;
+    padding:3px 7px;color:var(--muted);
+    border:1px solid var(--border);border-radius:var(--radius);font-weight:500;
+  }
+  .open-btn{
+    font-family:var(--sans);font-size:11px;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);white-space:nowrap;
+  }
+  body.dark .open-btn{color:var(--accent)}
+  .card:hover .open-btn{color:var(--earth)}
+
+  /* ---------- Empty ---------- */
+  .empty-state{
+    text-align:center;padding:80px 24px;
+    background:var(--surface);
+    border:1px dashed var(--border-strong);border-radius:var(--radius);
+  }
+  .empty-state h2{
+    font-family:var(--sans);font-weight:600;font-size:20px;letter-spacing:-.01em;
+    margin:0 0 8px;color:var(--text);
+  }
+  .empty-state p{margin:0;color:var(--muted);font-size:14px}
+
+  /* ---------- Footer ---------- */
+  footer{
+    margin-top:60px;padding-top:24px;
+    border-top:1px solid var(--border);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;
+  }
+  footer .motto{
+    font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:-.005em;
+    text-transform:none;color:var(--accent-2);font-weight:400;
+  }
+  body.dark footer .motto{color:var(--sage)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="topnav" aria-label="Breadcrumb">
+    <a href="/" class="backlink"><span class="arrow">←</span> Back to profile</a>
+  </nav>
+
+  <header>
+    <div class="title-block">
+      <p class="eyebrow"><span class="mark" aria-hidden="true"></span> Tools · Vol. 01</p>
+      <h1>My tools.</h1>
+      <p class="sub" id="subtitle">A personal hub of HTML tools built with Claude.</p>
+    </div>
+    <div class="controls">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark theme">Theme</button>
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <div class="search">
+      <label for="searchInput" class="visually-hidden" style="position:absolute;left:-9999px">Search tools</label>
+      <input type="text" id="searchInput" placeholder="Search tools" />
+    </div>
+    <div class="chips" id="tagFilters" role="toolbar" aria-label="Filter by tag">
+      <!-- filter chips injected -->
+    </div>
+  </div>
+
+  <div id="grid" class="grid"><!-- cards injected --></div>
+
+  <div id="emptyState" class="empty-state" style="display:none;">
+    <h2>Nothing here yet</h2>
+    <p>Clear the search or pick a different tag.</p>
+  </div>
+
+  <footer>
+    <span>Made, not marketed · Cloudflare Pages</span>
+    <span class="motto">&ldquo;Do the work. Let the work do the talking.&rdquo;</span>
+    <span>Updated <span id="updatedAt">—</span></span>
+  </footer>
+
+</div>
+
+<script>
+/* =========================================================
+   Theme — Paper by default, Dark via toggle.
+   (Storage key preserved: "mypages_theme")
+   ========================================================= */
+const THEME_KEY = "mypages_theme";
+(function initTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === "dark") document.body.classList.add("dark");
+  document.getElementById("themeToggle").addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    localStorage.setItem(THEME_KEY, document.body.classList.contains("dark") ? "dark" : "paper");
+  });
+})();
+
+/* =========================================================
+   Load manifest and render
+   (tools.json lives at the repo root, so fetch via absolute path)
+   ========================================================= */
+let state = { tools: [], activeTag: "all", query: "" };
+
+async function loadTools(){
+  try {
+    const res = await fetch("/tools.json", { cache: "no-cache" });
+    const data = await res.json();
+    state.tools = data.tools || [];
+    if (data.updated) document.getElementById("updatedAt").textContent = data.updated;
+    if (data.subtitle) document.getElementById("subtitle").textContent = data.subtitle;
+    renderFilters();
+    render();
+  } catch(e) {
+    document.getElementById("grid").innerHTML =
+      '<div class="empty-state" style="grid-column:1/-1"><h2>Couldn\'t load tools.json</h2><p>Make sure tools.json is at the repo root.</p></div>';
+  }
+}
+
+function renderFilters(){
+  const tags = new Set();
+  state.tools.forEach(t => (t.tags || []).forEach(tag => tags.add(tag)));
+  const container = document.getElementById("tagFilters");
+  container.innerHTML = "";
+  const makeChip = (label, value) => {
+    const c = document.createElement("span");
+    c.className = "chip" + (state.activeTag === value ? " active" : "");
+    c.textContent = label;
+    c.setAttribute("role", "button");
+    c.setAttribute("tabindex", "0");
+    c.addEventListener("click", () => { state.activeTag = value; renderFilters(); render(); });
+    c.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.click(); }
+    });
+    return c;
+  };
+  container.appendChild(makeChip("All", "all"));
+  [...tags].sort().forEach(t => container.appendChild(makeChip(t, t)));
+}
+
+/* Turn a tools.json path like "tools/prompt-builder.html" into an
+   absolute path "/tools/prompt-builder.html" so links work from /tools/. */
+function resolvePath(p){
+  if (!p) return "#";
+  if (/^(https?:)?\/\//.test(p)) return p;
+  return p.startsWith("/") ? p : "/" + p;
+}
+
+function render(){
+  const grid = document.getElementById("grid");
+  const empty = document.getElementById("emptyState");
+  const q = state.query.toLowerCase();
+  const filtered = state.tools.filter(t => {
+    const matchTag = state.activeTag === "all" || (t.tags || []).includes(state.activeTag);
+    const matchQ = !q || (t.title + " " + (t.description || "") + " " + (t.tags || []).join(" ")).toLowerCase().includes(q);
+    return matchTag && matchQ;
+  });
+
+  if (filtered.length === 0) {
+    grid.style.display = "none";
+    empty.style.display = "block";
+    return;
+  }
+  grid.style.display = "grid";
+  empty.style.display = "none";
+
+  grid.innerHTML = filtered.map(t => `
+    <a class="card" href="${resolvePath(t.path)}">
+      <div class="card-emoji">${t.emoji || "🔧"}</div>
+      <h3>${escapeHtml(t.title)}</h3>
+      <p>${escapeHtml(t.description || "")}</p>
+      <div class="card-footer">
+        <div class="tags">${(t.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>
+        <div class="open-btn">Open →</div>
+      </div>
+    </a>
+  `).join("");
+}
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  state.query = e.target.value;
+  render();
+});
+
+loadTools();
+</script>
+</body>
+</html>

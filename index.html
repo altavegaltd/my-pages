@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>My Tools — Max Cartwright-Wilson</title>
+<title>Max Cartwright-Wilson — Marketing &amp; Ecommerce Director</title>
+<meta name="description" content="Marketing and ecommerce director rebalancing marketing into a full-funnel demand engine. Based in the UK. Currently at DUSK.com." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
 <style>
   :root{
     /* Brand palette */
@@ -59,43 +60,52 @@
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
   body{
     background:var(--bg);
     color:var(--text);
     font-family:var(--body);
-    font-size:15px;
-    line-height:1.55;
+    font-size:16px;
+    line-height:1.6;
     -webkit-font-smoothing:antialiased;
     font-feature-settings:"ss01","cv11";
     min-height:100vh;
   }
 
-  .wrap{max-width:1200px;margin:0 auto;padding:56px 40px 80px}
-  @media (max-width:700px){.wrap{padding:40px 22px 60px}}
+  /* Subtle paper grain on light mode via CSS noise */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(rgba(17,19,15,0.025) 1px,transparent 1px);
+    background-size:3px 3px;opacity:.6;
+  }
+  body.dark::before{
+    background-image:radial-gradient(rgba(244,241,234,0.025) 1px,transparent 1px);
+  }
 
-  /* ---------- Header ---------- */
-  header{
-    display:flex;justify-content:space-between;align-items:flex-end;
-    gap:24px;flex-wrap:wrap;margin-bottom:44px;
-  }
-  .title-block{max-width:640px}
-  .eyebrow{
-    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.22em;
-    text-transform:uppercase;color:var(--accent);margin:0 0 14px;
-    display:flex;align-items:center;gap:10px;
-  }
-  .eyebrow .mark{
-    display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:1px;
-  }
-  h1{
-    font-family:var(--sans);font-weight:700;
-    font-size:clamp(40px,6vw,68px);line-height:.98;letter-spacing:-.03em;
-    color:var(--text);margin:0 0 14px;
-  }
-  .sub{color:var(--text-2);font-size:17px;line-height:1.5;margin:0;max-width:56ch}
-  .controls{display:flex;gap:8px;align-items:center}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 40px 80px;position:relative;z-index:1}
+  @media (max-width:700px){.wrap{padding:22px 22px 56px}}
 
-  /* ---------- Buttons ---------- */
+  /* ---------- Top nav ---------- */
+  .topnav{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:72px;gap:16px;flex-wrap:wrap;
+    padding-bottom:18px;border-bottom:1px solid var(--border);
+  }
+  .brandmark{
+    font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:-.01em;
+    color:var(--text);text-decoration:none;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .brandmark .dot{
+    width:10px;height:10px;background:var(--accent);border-radius:1px;
+  }
+  .navlinks{display:flex;align-items:center;gap:22px}
+  .navlinks a{
+    font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);text-decoration:none;font-weight:500;
+    transition:color .15s;
+  }
+  .navlinks a:hover{color:var(--accent)}
   .icon-btn{
     background:transparent;border:1px solid var(--border-strong);color:var(--text);
     padding:9px 14px;border-radius:var(--radius);cursor:pointer;
@@ -104,141 +114,556 @@
   }
   .icon-btn:hover{border-color:var(--accent);background:var(--surface)}
   body.dark .icon-btn:hover{background:var(--surface-2)}
+  @media (max-width:600px){
+    .navlinks{gap:14px}
+    .navlinks a.hide-sm{display:none}
+  }
 
-  /* ---------- Filter bar ---------- */
-  .filter-bar{
-    display:flex;gap:16px;flex-wrap:wrap;align-items:center;
-    margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);
+  /* ---------- Hero ---------- */
+  .hero{
+    display:grid;grid-template-columns:1.6fr 1fr;gap:56px;align-items:end;
+    margin-bottom:96px;
   }
-  .search{flex:1;min-width:240px;position:relative}
-  .search input{
-    width:100%;background:var(--surface);color:var(--text);
-    border:1px solid var(--border-strong);border-radius:var(--radius);
-    padding:11px 14px;font-size:14px;font-family:var(--body);outline:none;
-    transition:border-color .15s;
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;gap:40px;margin-bottom:72px}
   }
-  .search input::placeholder{color:var(--muted)}
-  .search input:focus{border-color:var(--accent)}
-  .chips{display:flex;gap:6px;flex-wrap:wrap}
-  .chip{
-    padding:6px 12px;background:transparent;color:var(--text-2);
-    border:1px solid var(--border-strong);border-radius:var(--radius);
-    font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
-    cursor:pointer;user-select:none;transition:all .15s;
+  .hero .intro{max-width:640px}
+  .eyebrow{
+    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 22px;
+    display:flex;align-items:center;gap:10px;
   }
-  .chip:hover{border-color:var(--accent);color:var(--text)}
-  .chip.active{background:var(--accent);color:var(--paper);border-color:var(--accent)}
-  body.dark .chip.active{color:var(--ink)}
+  .eyebrow .mark{display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:1px}
+  .hero h1{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(44px,7vw,84px);line-height:.95;letter-spacing:-.035em;
+    color:var(--text);margin:0 0 22px;
+  }
+  .hero h1 .quiet{color:var(--muted);font-weight:500;letter-spacing:-.03em}
+  .hero .headline{
+    font-family:var(--serif);font-style:italic;font-weight:400;
+    font-size:clamp(20px,2.4vw,26px);line-height:1.35;letter-spacing:-.01em;
+    color:var(--text-2);margin:0 0 28px;max-width:22ch;
+  }
+  .hero .meta{
+    display:flex;gap:22px;flex-wrap:wrap;
+    font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;
+  }
+  .hero .meta span strong{color:var(--text-2);font-weight:500;margin-right:6px}
 
-  /* ---------- Grid ---------- */
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-    gap:1px;background:var(--border);
+  /* ---------- Portrait ---------- */
+  .portrait{
+    width:100%;max-width:360px;justify-self:end;
+    aspect-ratio:4/5;position:relative;overflow:hidden;
+    background:var(--surface-2);
+    border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  @media (max-width:900px){.portrait{justify-self:start;max-width:280px}}
+  .portrait img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;display:block;
+  }
+  .portrait .fallback{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--olive-deep),var(--olive) 60%,var(--moss));
+    color:var(--paper);font-family:var(--sans);font-weight:600;font-size:82px;letter-spacing:-.04em;
+  }
+  body.dark .portrait .fallback{background:linear-gradient(135deg,var(--olive),var(--moss) 60%,var(--sage));color:var(--ink)}
+  .portrait .frame-label{
+    position:absolute;left:12px;bottom:12px;
+    font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--paper);opacity:.85;
+    background:rgba(17,19,15,0.55);padding:4px 8px;border-radius:1px;
+    backdrop-filter:blur(2px);
+  }
+
+  /* ---------- Sections ---------- */
+  section{margin:0 0 88px;scroll-margin-top:24px}
+  @media (max-width:700px){section{margin-bottom:64px}}
+  .section-label{
+    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 6px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .section-label .num{
+    font-family:var(--serif);font-style:italic;font-size:12px;letter-spacing:0;
+    color:var(--muted);font-weight:400;text-transform:none;
+  }
+  .section-title{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(28px,3.6vw,40px);line-height:1;letter-spacing:-.025em;
+    color:var(--text);margin:0 0 36px;
+  }
+
+  /* ---------- About ---------- */
+  .about{
+    display:grid;grid-template-columns:1fr 2fr;gap:56px;
+  }
+  @media (max-width:900px){.about{grid-template-columns:1fr;gap:24px}}
+  .about .pull{
+    font-family:var(--serif);font-style:italic;font-weight:400;
+    font-size:clamp(22px,2.4vw,28px);line-height:1.3;letter-spacing:-.01em;
+    color:var(--accent);margin:0;position:sticky;top:24px;align-self:start;
+    padding-left:14px;border-left:2px solid var(--accent);
+  }
+  body.dark .about .pull{color:var(--sage)}
+  @media (max-width:900px){.about .pull{position:static}}
+  .prose p{margin:0 0 18px;font-size:16.5px;line-height:1.7;color:var(--text-2)}
+  .prose p:last-child{margin-bottom:0}
+  .prose p strong{color:var(--text);font-weight:600}
+
+  /* ---------- Experience ---------- */
+  .xp{display:flex;flex-direction:column;gap:0}
+  .org{
+    display:grid;grid-template-columns:1fr 2.4fr;gap:56px;
+    padding:36px 0;border-top:1px solid var(--border);
+  }
+  .org:first-child{border-top:none;padding-top:0}
+  @media (max-width:900px){.org{grid-template-columns:1fr;gap:18px}}
+  .org-head{position:sticky;top:24px;align-self:start}
+  @media (max-width:900px){.org-head{position:static}}
+  .org-name{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(22px,2.4vw,28px);line-height:1.05;letter-spacing:-.02em;
+    color:var(--text);margin:0 0 6px;
+  }
+  .org-meta{
+    font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;
+  }
+  .org-meta .dates{display:block;margin-top:4px;color:var(--muted)}
+  .roles{display:flex;flex-direction:column;gap:28px}
+  .role-title{
+    font-family:var(--sans);font-weight:600;
+    font-size:17px;letter-spacing:-.01em;color:var(--text);margin:0 0 4px;
+  }
+  .role-when{
+    font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;margin:0 0 12px;
+  }
+  .role-when .sep{margin:0 8px;opacity:.5}
+  .role-body p{margin:0 0 12px;color:var(--text-2);font-size:15.5px;line-height:1.65}
+  .role-body p:last-child{margin-bottom:0}
+
+  /* ---------- Featured essay ---------- */
+  .featured{
+    background:var(--surface);
     border:1px solid var(--border);
+    padding:56px;border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    position:relative;
   }
-  .card{
-    background:var(--surface);
-    padding:26px 24px 22px;
-    display:flex;flex-direction:column;
-    text-decoration:none;color:var(--text);
-    min-height:200px;position:relative;
-    transition:background .15s;
+  @media (max-width:700px){.featured{padding:32px 24px}}
+  .featured .tagline{
+    font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--earth);font-weight:500;margin:0 0 14px;
   }
-  .card:hover{background:var(--surface-2)}
-  .card-emoji{
-    font-size:22px;margin-bottom:18px;
-    width:40px;height:40px;display:flex;align-items:center;justify-content:center;
-    background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);
+  body.dark .featured .tagline{color:var(--tan)}
+  .featured h3{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(24px,3.2vw,36px);line-height:1.08;letter-spacing:-.025em;
+    color:var(--text);margin:0 0 28px;max-width:28ch;
   }
-  body.dark .card-emoji{background:var(--bg)}
-  .card h3{
-    font-family:var(--sans);font-weight:600;font-size:18px;letter-spacing:-.015em;
-    margin:0 0 8px;color:var(--text);
+  .featured .essay{max-width:62ch}
+  .featured .essay p{
+    margin:0 0 18px;font-size:16.5px;line-height:1.75;color:var(--text-2);
   }
-  .card p{
-    margin:0;color:var(--text-2);font-size:14px;line-height:1.5;flex:1;
+  .featured .essay p.short{font-weight:500;color:var(--text);font-size:17px}
+  .featured blockquote{
+    font-family:var(--serif);font-style:italic;font-weight:400;
+    font-size:clamp(19px,2.1vw,22px);line-height:1.4;letter-spacing:-.005em;
+    margin:28px 0;padding-left:18px;border-left:2px solid var(--accent);
+    color:var(--accent);
   }
-  .card-footer{
-    display:flex;justify-content:space-between;align-items:flex-end;
-    margin-top:18px;gap:12px;
+  body.dark .featured blockquote{color:var(--sage)}
+  .featured .essay hr{
+    border:none;border-top:1px solid var(--border);margin:28px 0;
   }
-  .tags{display:flex;gap:4px;flex-wrap:wrap}
-  .tag{
-    font-family:var(--sans);font-size:10px;text-transform:uppercase;letter-spacing:.14em;
-    padding:3px 7px;color:var(--muted);
-    border:1px solid var(--border);border-radius:var(--radius);font-weight:500;
-  }
-  .open-btn{
-    font-family:var(--sans);font-size:11px;font-weight:500;
-    letter-spacing:.14em;text-transform:uppercase;
-    color:var(--accent);white-space:nowrap;
-  }
-  body.dark .open-btn{color:var(--accent)}
-  .card:hover .open-btn{color:var(--earth)}
 
-  /* ---------- Empty ---------- */
-  .empty-state{
-    text-align:center;padding:80px 24px;
-    background:var(--surface);
-    border:1px dashed var(--border-strong);border-radius:var(--radius);
+  /* ---------- Skills ---------- */
+  .skills{display:flex;flex-direction:column;gap:18px}
+  .skills .primary{display:flex;flex-wrap:wrap;gap:10px}
+  .skill-lg{
+    font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:-.005em;
+    padding:12px 18px;background:var(--accent);color:var(--paper);
+    border-radius:var(--radius);border:1px solid var(--accent);
   }
-  .empty-state h2{
-    font-family:var(--sans);font-weight:600;font-size:20px;letter-spacing:-.01em;
-    margin:0 0 8px;color:var(--text);
+  body.dark .skill-lg{color:var(--ink)}
+  .skills .secondary{display:flex;flex-wrap:wrap;gap:8px}
+  .skill-sm{
+    font-family:var(--sans);font-weight:500;font-size:12px;letter-spacing:.01em;
+    padding:8px 14px;background:transparent;color:var(--text-2);
+    border:1px solid var(--border-strong);border-radius:var(--radius);
   }
-  .empty-state p{margin:0;color:var(--muted);font-size:14px}
+
+  /* ---------- Education & Certs ---------- */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+  @media (max-width:700px){.two-col{grid-template-columns:1fr;gap:40px}}
+  .mini-head{
+    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 16px;
+  }
+  .listing{display:flex;flex-direction:column;gap:14px}
+  .listing .item{padding:0}
+  .listing .item .t{font-family:var(--sans);font-weight:600;font-size:16px;color:var(--text);margin:0 0 4px}
+  .listing .item .m{font-size:14px;color:var(--muted);margin:0}
+
+  /* ---------- Connect ---------- */
+  .connect{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    padding:48px 56px;border-radius:var(--radius);
+    display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;
+  }
+  @media (max-width:700px){.connect{padding:32px 24px}}
+  .connect h3{
+    font-family:var(--sans);font-weight:700;font-size:clamp(22px,2.4vw,28px);
+    line-height:1.1;letter-spacing:-.02em;color:var(--text);margin:0 0 8px;max-width:32ch;
+  }
+  .connect p{margin:0;color:var(--muted);font-size:14px;max-width:50ch}
+  .connect .actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn-primary{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--accent);color:var(--paper);border:1px solid var(--accent);
+    padding:12px 22px;border-radius:var(--radius);
+    font-family:var(--sans);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    text-decoration:none;transition:background .15s,border-color .15s;
+  }
+  body.dark .btn-primary{color:var(--ink)}
+  .btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+  .btn-secondary{
+    display:inline-flex;align-items:center;gap:8px;
+    background:transparent;color:var(--text);border:1px solid var(--border-strong);
+    padding:12px 22px;border-radius:var(--radius);
+    font-family:var(--sans);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    text-decoration:none;transition:border-color .15s,background .15s;
+  }
+  .btn-secondary:hover{border-color:var(--accent);background:var(--surface)}
 
   /* ---------- Footer ---------- */
   footer{
-    margin-top:60px;padding-top:24px;
+    margin-top:80px;padding-top:28px;
     border-top:1px solid var(--border);
-    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;
     font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
     color:var(--muted);font-weight:500;
   }
+  footer a{color:var(--muted);text-decoration:none;transition:color .15s}
+  footer a:hover{color:var(--accent)}
   footer .motto{
     font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:-.005em;
     text-transform:none;color:var(--accent-2);font-weight:400;
   }
   body.dark footer .motto{color:var(--sage)}
+
+  /* ---------- Focus ---------- */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--radius);
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header>
-    <div class="title-block">
-      <p class="eyebrow"><span class="mark" aria-hidden="true"></span> Tools · Vol. 01</p>
-      <h1>My tools.</h1>
-      <p class="sub" id="subtitle">A personal hub of HTML tools built with Claude.</p>
-    </div>
-    <div class="controls">
+  <nav class="topnav" aria-label="Primary">
+    <a class="brandmark" href="/"><span class="dot" aria-hidden="true"></span> Max Cartwright-Wilson</a>
+    <div class="navlinks">
+      <a href="#about" class="hide-sm">About</a>
+      <a href="#experience" class="hide-sm">Experience</a>
+      <a href="#writing" class="hide-sm">Writing</a>
+      <a href="/tools/">Tools</a>
       <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark theme">Theme</button>
     </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero">
+    <div class="intro">
+      <p class="eyebrow"><span class="mark" aria-hidden="true"></span> Profile · Apr 2026</p>
+      <h1>Max <span class="quiet">Cartwright&#8209;Wilson.</span></h1>
+      <p class="headline">Marketing &amp; Ecommerce Director rebalancing marketing into a full&#8209;funnel demand engine at a £200m UK digital&#8209;first retailer.</p>
+      <div class="meta">
+        <span><strong>Based</strong> United Kingdom</span>
+        <span><strong>Sector</strong> Consumer &amp; Ecommerce</span>
+        <span><strong>At</strong> DUSK.com</span>
+      </div>
+    </div>
+    <figure class="portrait" aria-label="Portrait of Max Cartwright-Wilson">
+      <div class="fallback" aria-hidden="true">MC</div>
+      <img src="/assets/max.jpg" alt="Max Cartwright-Wilson" onerror="this.style.display='none'" />
+      <figcaption class="frame-label">MCW · 2026</figcaption>
+    </figure>
   </header>
 
-  <div class="filter-bar">
-    <div class="search">
-      <label for="searchInput" class="visually-hidden" style="position:absolute;left:-9999px">Search tools</label>
-      <input type="text" id="searchInput" placeholder="Search tools" />
-    </div>
-    <div class="chips" id="tagFilters" role="toolbar" aria-label="Filter by tag">
-      <!-- filter chips injected -->
-    </div>
-  </div>
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" aria-labelledby="about-title">
+    <p class="section-label"><span class="num">01</span> About</p>
+    <h2 class="section-title" id="about-title">The work, plainly.</h2>
 
-  <div id="grid" class="grid"><!-- cards injected --></div>
+    <div class="about">
+      <p class="pull">&ldquo;I think of marketing as a commercial discipline, not a creative one. Brand is valuable because it increases the productivity of performance.&rdquo;</p>
+      <div class="prose">
+        <p>I lead the marketing, ecommerce and technology function at DUSK, a UK digital-first homeware retailer, and sit on the senior leadership team.</p>
+        <p>My role is to set the commercial direction for the function, build the operating model, and make sure marketing, ecommerce and technology work as one integrated system rather than as independent channels. The team I lead covers full-funnel marketing, ecommerce trading and CRO, CRM and lifecycle, and the technology and data infrastructure underneath it.</p>
+        <p>The work underway at DUSK is a shift from a performance-heavy acquisition model into a more balanced demand engine &mdash; brand, mid-funnel, CRM and loyalty operating together. In practice that means phasing media reallocation against clear efficiency guardrails, rebuilding measurement so capital allocation is informed by incrementality rather than last-click, launching a structured loyalty and lifecycle programme, and professionalising the marketing organisation around commercial outcomes. The team are the people doing this &mdash; my job is to frame the problem, design the operating model, and clear the path.</p>
+        <p>I think of marketing as a commercial discipline, not a creative one. Brand is valuable because it increases the productivity of performance. Measurement matters because it drives behaviour. Teams compound when structure, accountability and trust are clear.</p>
+        <p>Before DUSK, I have worked in retail ecommerce and digital growth since 2015, across high-growth and scale-up environments. Earlier in my career I led IT infrastructure in the public sector, which still informs how I think about the technology and data layer underneath marketing.</p>
+        <p>If you are working on the brand–performance integration problem, full-funnel measurement, or scaling marketing in a high-growth business, happy to compare notes.</p>
+      </div>
+    </div>
+  </section>
 
-  <div id="emptyState" class="empty-state" style="display:none;">
-    <h2>Nothing here yet</h2>
-    <p>Clear the search or pick a different tag.</p>
-  </div>
+  <!-- ===================== EXPERIENCE ===================== -->
+  <section id="experience" aria-labelledby="xp-title">
+    <p class="section-label"><span class="num">02</span> Experience</p>
+    <h2 class="section-title" id="xp-title">Sixteen years, one throughline.</h2>
+
+    <div class="xp">
+
+      <article class="org">
+        <div class="org-head">
+          <h3 class="org-name">DUSK.com</h3>
+          <div class="org-meta">
+            UK Digital-first Retail
+            <span class="dates">Nov 2022 — Present · Leeds</span>
+          </div>
+        </div>
+        <div class="roles">
+          <div>
+            <h4 class="role-title">Marketing &amp; Ecommerce Director</h4>
+            <p class="role-when">Sep 2023 — Present <span class="sep">·</span> Senior Leadership Team</p>
+            <div class="role-body">
+              <p>At DUSK, we are moving from a performance-heavy acquisition model into something more balanced &mdash; where brand, mid-funnel, CRM and loyalty operate as one system, rather than as separate channels.</p>
+              <p>In practice, that means phasing media reallocation against clear efficiency guardrails, rebuilding measurement so capital allocation is guided by incrementality rather than last-click, and building a structured loyalty and lifecycle programme.</p>
+              <p>I lead marketing, ecommerce and technology as part of the senior leadership team. A good team does the work.</p>
+            </div>
+          </div>
+          <div>
+            <h4 class="role-title">Consultant</h4>
+            <p class="role-when">Nov 2022 — Sep 2023</p>
+            <div class="role-body">
+              <p>Engaged initially to lead the replatforming of DUSK&rsquo;s ecommerce and technology estate &mdash; Shopify Plus migration, ERP integration, and the foundations of the current data and measurement infrastructure. Remit expanded into marketing and ecommerce leadership before joining full-time as Marketing &amp; Ecommerce Director.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="org">
+        <div class="org-head">
+          <h3 class="org-name">Altavega</h3>
+          <div class="org-meta">
+            Advisory &amp; Consultancy
+            <span class="dates">Dec 2021 — Present · York</span>
+          </div>
+        </div>
+        <div class="roles">
+          <div>
+            <h4 class="role-title">Founder &amp; Consultant</h4>
+            <p class="role-when">Dec 2021 — Present</p>
+            <div class="role-body">
+              <p>Founder of Altavega, a personal consulting and advisory vehicle providing marketing, ecommerce and technology strategy to ambitious UK brands. Engagements have covered replatforming, full-funnel marketing strategy, and ecommerce operating-model design.</p>
+              <p>Active, but stepped away from new engagements while focused full-time on DUSK. The vehicle remains in place for future advisory and board-adjacent work.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="org">
+        <div class="org-head">
+          <h3 class="org-name">Frederic St James</h3>
+          <div class="org-meta">
+            Direct-to-consumer, Leather Goods
+            <span class="dates">Apr 2022 — Present</span>
+          </div>
+        </div>
+        <div class="roles">
+          <div>
+            <h4 class="role-title">Founder</h4>
+            <p class="role-when">Apr 2022 — Present</p>
+            <div class="role-body">
+              <p>Founder of a boutique ecommerce site specialising in handmade leather goods from independent ateliers. A side venture rooted in the craft, supply, and direct-to-consumer dynamics of premium product categories.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="org">
+        <div class="org-head">
+          <h3 class="org-name">Start Fitness UK</h3>
+          <div class="org-meta">
+            Multi-brand Sports Retail
+            <span class="dates">Sep 2020 — Aug 2022 · Newcastle-upon-Tyne</span>
+          </div>
+        </div>
+        <div class="roles">
+          <div>
+            <h4 class="role-title">Head of Digital &amp; Ecommerce</h4>
+            <p class="role-when">Sep 2020 — Aug 2022</p>
+            <div class="role-body">
+              <p>Led digital, ecommerce and marketing for a UK multi-brand sports and fitness retailer. Scope covered the online P&amp;L, trading, digital acquisition, and the development of the platform and team.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="org">
+        <div class="org-head">
+          <h3 class="org-name">UNEN Brand Group</h3>
+          <div class="org-meta">
+            Sports &amp; Performance Brands
+            <span class="dates">Dec 2015 — Sep 2020 · North Yorkshire</span>
+          </div>
+        </div>
+        <div class="roles">
+          <div>
+            <h4 class="role-title">Head of Ecommerce Marketing</h4>
+            <p class="role-when">Aug 2018 — Sep 2020</p>
+            <div class="role-body">
+              <p>Led ecommerce and digital marketing across the group&rsquo;s portfolio of direct-to-consumer sports and performance brands. Responsibility spanned digital acquisition, CRM, site merchandising and trading performance.</p>
+            </div>
+          </div>
+          <div>
+            <h4 class="role-title">Ecommerce Manager</h4>
+            <p class="role-when">Aug 2017 — Jul 2018</p>
+            <div class="role-body">
+              <p>Owned day-to-day ecommerce operations across the group&rsquo;s brand sites &mdash; merchandising, conversion, campaign delivery, and commercial trading rhythm. A step-up role into the senior ecommerce marketing lead.</p>
+            </div>
+          </div>
+          <div>
+            <h4 class="role-title">Technology Lead</h4>
+            <p class="role-when">Dec 2015 — Aug 2017</p>
+            <div class="role-body">
+              <p>Led technology and platform delivery across the group&rsquo;s ecommerce estate, bridging commercial and technical teams. This role marked the transition from public-sector IT infrastructure into retail ecommerce, and remains the foundation of the commercial-plus-technical dual fluency I carry today.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="org">
+        <div class="org-head">
+          <h3 class="org-name">Cambridgeshire County Council</h3>
+          <div class="org-meta">
+            Public-sector IT Infrastructure
+            <span class="dates">Sep 2010 — Dec 2015 · Cambridge</span>
+          </div>
+        </div>
+        <div class="roles">
+          <div>
+            <h4 class="role-title">Network Engineer &rarr; Network Manager &rarr; Infrastructure Manager</h4>
+            <p class="role-when">Sep 2010 — Dec 2015</p>
+            <div class="role-body">
+              <p>Early career in public-sector IT infrastructure. Progressed from Network Engineer to Infrastructure Manager over five years, owning network architecture, delivery, and team management. The operational and technical foundation for the technology scope I now hold at DUSK, and for my consulting work through Altavega.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED ESSAY ===================== -->
+  <section id="writing" aria-labelledby="writing-title">
+    <p class="section-label"><span class="num">03</span> Writing</p>
+    <h2 class="section-title" id="writing-title">A note on what I&rsquo;m working on.</h2>
+
+    <article class="featured">
+      <p class="tagline">Featured · Apr 2026</p>
+      <h3>Three years ago I stopped thinking about brand and performance as separate budgets.</h3>
+      <div class="essay">
+        <p class="short">The instinct to split marketing into &ldquo;brand spend&rdquo; and &ldquo;performance spend&rdquo; is one of the most expensive habits in UK retail right now. It makes for tidy governance, clean P&amp;L reporting, and poor capital allocation.</p>
+        <p>Here is what actually happens when brand is run as a parallel line item.</p>
+        <p>Performance teams get measured on last-click ROAS and are pushed to over-invest in the channels that harvest branded demand &mdash; branded search, retargeting, anything close to the bottom of the funnel. MER looks healthy. Growth stalls.</p>
+        <p>Brand teams get measured on awareness trackers and are pushed to defend creative expression against commercial logic. The aesthetic improves. The performance team rolls its eyes.</p>
+        <p><em>Nobody owns the productivity of the system.</em></p>
+
+        <blockquote>Brand is valuable because it increases the productivity of performance, not because it looks nice.</blockquote>
+
+        <p>The shift we are making is simple to describe and hard to execute: every pound spent on brand is an investment in the CTR, CVR, blended CAC and repeat rate of the pounds spent downstream. Measurement has to prove that or kill it. Capital allocation has to follow the measurement.</p>
+        <p>When this is set up properly, the argument about the &ldquo;right split&rdquo; disappears. You stop asking &ldquo;how much brand, how much performance&rdquo; and start asking &ldquo;what is the marginal productivity of the next pound&rdquo;. Two budgets become one system.</p>
+        <p>It takes longer than it should. It costs political capital. It is worth it.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================== SKILLS ===================== -->
+  <section id="skills" aria-labelledby="skills-title">
+    <p class="section-label"><span class="num">04</span> Skills</p>
+    <h2 class="section-title" id="skills-title">What I spend my week on.</h2>
+
+    <div class="skills">
+      <div class="primary" aria-label="Primary skills">
+        <span class="skill-lg">Marketing Strategy</span>
+        <span class="skill-lg">Ecommerce</span>
+        <span class="skill-lg">Growth Strategy</span>
+      </div>
+      <div class="secondary" aria-label="Additional skills">
+        <span class="skill-sm">Performance Marketing</span>
+        <span class="skill-sm">Brand Strategy</span>
+        <span class="skill-sm">Digital Marketing</span>
+        <span class="skill-sm">CRM</span>
+        <span class="skill-sm">Customer Lifecycle</span>
+        <span class="skill-sm">Marketing Analytics</span>
+        <span class="skill-sm">P&amp;L Management</span>
+        <span class="skill-sm">Team Leadership</span>
+        <span class="skill-sm">Media Planning</span>
+        <span class="skill-sm">Marketing Operations</span>
+        <span class="skill-sm">Digital Transformation</span>
+        <span class="skill-sm">Stakeholder Management</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EDUCATION & CERTIFICATIONS ===================== -->
+  <section id="credentials" aria-labelledby="credentials-title">
+    <p class="section-label"><span class="num">05</span> Credentials</p>
+    <h2 class="section-title" id="credentials-title">Education &amp; certifications.</h2>
+
+    <div class="two-col">
+      <div>
+        <p class="mini-head">Education</p>
+        <div class="listing">
+          <div class="item">
+            <p class="t">The Open University</p>
+            <p class="m">BSc, Information Technology</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="mini-head">Certifications</p>
+        <div class="listing">
+          <div class="item">
+            <p class="t">Shopify Plus Partner</p>
+            <p class="m">Shopify</p>
+          </div>
+          <div class="item">
+            <p class="t">Digital Marketing &amp; Ecommerce Certificate</p>
+            <p class="m">Google</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONNECT ===================== -->
+  <section id="connect" aria-labelledby="connect-title">
+    <div class="connect">
+      <div>
+        <h3 id="connect-title">If you&rsquo;re working on brand–performance integration, full-funnel measurement, or scaling marketing in a high-growth business &mdash; let&rsquo;s talk.</h3>
+        <p>I keep inbound light. Short notes land best.</p>
+      </div>
+      <div class="actions">
+        <a class="btn-primary" href="mailto:max@altavega.com">Email</a>
+        <a class="btn-secondary" href="https://www.linkedin.com/in/maxcwilson/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </div>
+  </section>
 
   <footer>
-    <span>Made, not marketed · Cloudflare Pages</span>
-    <span class="motto">“Do the work. Let the work do the talking.”</span>
-    <span>Updated <span id="updatedAt">—</span></span>
+    <span><a href="/tools/">Tools &rarr;</a></span>
+    <span class="motto">&ldquo;Do the work. Let the work do the talking.&rdquo;</span>
+    <span>Made, not marketed</span>
   </footer>
 
 </div>
@@ -246,7 +671,7 @@
 <script>
 /* =========================================================
    Theme — Paper by default, Dark via toggle.
-   (Storage key preserved: "mypages_theme")
+   Shared storage key with /tools/ so the two pages stay in sync.
    ========================================================= */
 const THEME_KEY = "mypages_theme";
 (function initTheme(){
@@ -257,87 +682,6 @@ const THEME_KEY = "mypages_theme";
     localStorage.setItem(THEME_KEY, document.body.classList.contains("dark") ? "dark" : "paper");
   });
 })();
-
-/* =========================================================
-   Load manifest and render
-   ========================================================= */
-let state = { tools: [], activeTag: "all", query: "" };
-
-async function loadTools(){
-  try {
-    const res = await fetch("tools.json", { cache: "no-cache" });
-    const data = await res.json();
-    state.tools = data.tools || [];
-    if (data.updated) document.getElementById("updatedAt").textContent = data.updated;
-    if (data.subtitle) document.getElementById("subtitle").textContent = data.subtitle;
-    renderFilters();
-    render();
-  } catch(e) {
-    document.getElementById("grid").innerHTML =
-      '<div class="empty-state" style="grid-column:1/-1"><h2>Couldn\'t load tools.json</h2><p>Make sure tools.json is next to index.html.</p></div>';
-  }
-}
-
-function renderFilters(){
-  const tags = new Set();
-  state.tools.forEach(t => (t.tags || []).forEach(tag => tags.add(tag)));
-  const container = document.getElementById("tagFilters");
-  container.innerHTML = "";
-  const makeChip = (label, value) => {
-    const c = document.createElement("span");
-    c.className = "chip" + (state.activeTag === value ? " active" : "");
-    c.textContent = label;
-    c.setAttribute("role", "button");
-    c.setAttribute("tabindex", "0");
-    c.addEventListener("click", () => { state.activeTag = value; renderFilters(); render(); });
-    c.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.click(); }
-    });
-    return c;
-  };
-  container.appendChild(makeChip("All", "all"));
-  [...tags].sort().forEach(t => container.appendChild(makeChip(t, t)));
-}
-
-function render(){
-  const grid = document.getElementById("grid");
-  const empty = document.getElementById("emptyState");
-  const q = state.query.toLowerCase();
-  const filtered = state.tools.filter(t => {
-    const matchTag = state.activeTag === "all" || (t.tags || []).includes(state.activeTag);
-    const matchQ = !q || (t.title + " " + (t.description || "") + " " + (t.tags || []).join(" ")).toLowerCase().includes(q);
-    return matchTag && matchQ;
-  });
-
-  if (filtered.length === 0) {
-    grid.style.display = "none";
-    empty.style.display = "block";
-    return;
-  }
-  grid.style.display = "grid";
-  empty.style.display = "none";
-
-  grid.innerHTML = filtered.map(t => `
-    <a class="card" href="${t.path}">
-      <div class="card-emoji">${t.emoji || "🔧"}</div>
-      <h3>${escapeHtml(t.title)}</h3>
-      <p>${escapeHtml(t.description || "")}</p>
-      <div class="card-footer">
-        <div class="tags">${(t.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>
-        <div class="open-btn">Open →</div>
-      </div>
-    </a>
-  `).join("");
-}
-
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
-
-document.getElementById("searchInput").addEventListener("input", e => {
-  state.query = e.target.value;
-  render();
-});
-
-loadTools();
 </script>
 </body>
 </html>
