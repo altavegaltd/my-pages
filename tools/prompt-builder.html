@@ -3,205 +3,250 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Claude Prompt Builder — for Max</title>
+<title>Prompt Builder — Max Cartwright-Wilson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f1115;
-    --panel: #171a21;
-    --panel-2: #1f232c;
-    --border: #2a2f3a;
-    --text: #e8ecf1;
-    --muted: #9aa3b2;
-    --accent: #c96442;
-    --accent-2: #e07a5c;
-    --ok: #4ade80;
-    --chip: #232832;
-    --chip-active: #c96442;
-    --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  :root{
+    /* Brand palette */
+    --olive-deep:#2E3A21;
+    --olive:#4A5739;
+    --moss:#6C7556;
+    --sage:#A9AE94;
+    --cognac:#8A5A3B;
+    --tan:#B69874;
+    --beige:#D9C9B0;
+    --stone:#E8E1D3;
+    --paper:#F4F1EA;
+    --bone:#EDE8DC;
+    --graphite:#1C1E1A;
+    --ink:#11130F;
+
+    /* Semantic — Paper (default) */
+    --bg:var(--paper);
+    --surface:#ffffff;
+    --surface-2:var(--bone);
+    --border:rgba(17,19,15,0.10);
+    --border-strong:rgba(17,19,15,0.18);
+    --text:var(--ink);
+    --text-2:#2A2D26;
+    --muted:#5B6054;
+    --accent:var(--olive-deep);
+    --accent-2:var(--olive);
+    --earth:var(--cognac);
+    --ok:var(--olive-deep);
+    --shadow:0 4px 14px rgba(17,19,15,0.06);
+
+    --radius:2px;
+    --sans:'Inter Tight','Inter',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+    --body:'Inter',system-ui,-apple-system,sans-serif;
+    --serif:'Fraunces',Georgia,serif;
+    --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
   }
-  body.light {
-    --bg: #f5f6f8;
-    --panel: #ffffff;
-    --panel-2: #f0f2f6;
-    --border: #dfe3ea;
-    --text: #1a1d23;
-    --muted: #5b6474;
-    --accent: #c96442;
-    --accent-2: #a94f32;
-    --ok: #16a34a;
-    --chip: #eef1f5;
-    --chip-active: #c96442;
-    --shadow: 0 6px 18px rgba(20,24,40,0.08);
+  body.dark{
+    --bg:var(--ink);
+    --surface:var(--graphite);
+    --surface-2:#262922;
+    --border:rgba(244,241,234,0.10);
+    --border-strong:rgba(244,241,234,0.20);
+    --text:var(--paper);
+    --text-2:rgba(244,241,234,0.82);
+    --muted:rgba(244,241,234,0.58);
+    --accent:var(--sage);
+    --accent-2:var(--moss);
+    --earth:var(--tan);
+    --ok:var(--sage);
+    --shadow:0 10px 30px rgba(0,0,0,0.45);
   }
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 14px; line-height: 1.5;
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:var(--body);font-size:14px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";
   }
-  .wrap {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px;
+
+  .wrap{max-width:1400px;margin:0 auto;padding:40px 32px 60px}
+  @media (max-width:700px){.wrap{padding:28px 20px 48px}}
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    margin-bottom:32px;gap:20px;flex-wrap:wrap;
+    padding-bottom:24px;border-bottom:1px solid var(--border);
   }
-  header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+  .title-block{max-width:680px}
+  .eyebrow{
+    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 12px;
+    display:flex;align-items:center;gap:10px;
   }
-  header h1 {
-    font-size: 22px; margin: 0; font-weight: 600;
-    display: flex; align-items: center; gap: 10px;
+  .eyebrow .mark{display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:1px}
+  header h1{
+    font-family:var(--sans);font-weight:700;font-size:clamp(28px,3.6vw,40px);
+    line-height:1;letter-spacing:-.025em;color:var(--text);margin:0 0 10px;
   }
-  header h1 .dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--accent); display: inline-block;
+  header .sub{color:var(--text-2);font-size:15px;line-height:1.5;margin:0;max-width:60ch}
+  header .controls{display:flex;gap:10px;align-items:center}
+
+  /* ---------- Mode toggle ---------- */
+  .toggle{
+    display:inline-flex;background:var(--surface);
+    border:1px solid var(--border-strong);border-radius:var(--radius);overflow:hidden;
   }
-  header .sub { color: var(--muted); font-size: 13px; }
-  header .controls { display: flex; gap: 8px; align-items: center; }
-  .toggle {
-    display: inline-flex; background: var(--panel); border: 1px solid var(--border);
-    border-radius: 10px; overflow: hidden;
+  .toggle button{
+    padding:9px 16px;background:transparent;color:var(--text-2);
+    border:none;cursor:pointer;
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    transition:background .15s,color .15s;
   }
-  .toggle button {
-    padding: 8px 14px; background: transparent; color: var(--text);
-    border: none; cursor: pointer; font-size: 13px; font-weight: 500;
+  .toggle button:hover{color:var(--text)}
+  .toggle button.active{background:var(--accent);color:var(--paper)}
+  body.dark .toggle button.active{color:var(--ink)}
+
+  .icon-btn{
+    background:transparent;border:1px solid var(--border-strong);color:var(--text);
+    padding:9px 14px;border-radius:var(--radius);cursor:pointer;
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    transition:border-color .15s,background .15s;
   }
-  .toggle button.active {
-    background: var(--accent); color: white;
+  .icon-btn:hover{border-color:var(--accent);background:var(--surface)}
+  body.dark .icon-btn:hover{background:var(--surface-2)}
+
+  /* ---------- Grid ---------- */
+  .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px}
+  @media (max-width:1000px){.grid{grid-template-columns:1fr}}
+
+  /* ---------- Panel ---------- */
+  .panel{
+    background:var(--surface);border:1px solid var(--border-strong);
+    border-radius:var(--radius);padding:28px;
   }
-  .icon-btn {
-    background: var(--panel); border: 1px solid var(--border); color: var(--text);
-    padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  .panel h2{
+    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);
+    margin:0 0 16px;display:flex;align-items:center;gap:10px;
   }
-  .icon-btn:hover { background: var(--panel-2); }
-  .grid {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 20px;
+  .panel h2 .n{
+    display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;
+    background:var(--accent);color:var(--paper);font-family:var(--sans);font-weight:600;
+    font-size:11px;letter-spacing:0;border-radius:var(--radius);
   }
-  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
-  .panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: var(--shadow);
+  body.dark .panel h2 .n{color:var(--ink)}
+
+  .field{margin-bottom:18px}
+  .field label{
+    display:block;font-family:var(--sans);font-size:13px;font-weight:500;
+    margin-bottom:6px;color:var(--text);letter-spacing:-.005em;
   }
-  .panel h2 {
-    font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); margin: 0 0 14px 0; font-weight: 600;
+  .field .hint{
+    display:block;color:var(--muted);font-size:12px;margin-bottom:6px;font-weight:400;
+    font-family:var(--body);
   }
-  .field { margin-bottom: 16px; }
-  .field label {
-    display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px;
-    color: var(--text);
+  select, input[type="text"], textarea{
+    width:100%;background:var(--bg);color:var(--text);
+    border:1px solid var(--border-strong);border-radius:var(--radius);
+    padding:10px 12px;font-size:14px;font-family:var(--body);outline:none;
+    transition:border-color .15s;
   }
-  .field .hint {
-    display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px;
+  body.dark select, body.dark input[type="text"], body.dark textarea{background:var(--surface-2)}
+  textarea{resize:vertical;min-height:78px;line-height:1.5}
+  select:focus, input:focus, textarea:focus{border-color:var(--accent)}
+  select{
+    appearance:none;-webkit-appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;
+    background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px;
   }
-  select, input[type="text"], textarea {
-    width: 100%;
-    background: var(--panel-2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 13px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.15s;
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:600px){.row{grid-template-columns:1fr}}
+
+  /* ---------- Chips ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{
+    padding:6px 12px;background:transparent;color:var(--text-2);
+    border:1px solid var(--border-strong);border-radius:var(--radius);
+    font-family:var(--sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+    cursor:pointer;user-select:none;transition:all .15s;
   }
-  textarea { resize: vertical; min-height: 70px; }
-  select:focus, input:focus, textarea:focus { border-color: var(--accent); }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip {
-    padding: 6px 10px; background: var(--chip); color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 999px; font-size: 12px; cursor: pointer;
-    user-select: none; transition: all 0.15s;
+  .chip:hover{border-color:var(--accent);color:var(--text)}
+  .chip.active{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+  body.dark .chip.active{color:var(--ink)}
+
+  /* ---------- Divider ---------- */
+  .section-divider{height:1px;background:var(--border);margin:22px 0}
+
+  /* ---------- Preview ---------- */
+  .preview-wrap{position:sticky;top:20px}
+  .preview{
+    background:var(--bg);
+    border:1px solid var(--border-strong);border-radius:var(--radius);
+    padding:18px;
+    font-family:var(--mono);font-size:13px;line-height:1.6;
+    white-space:pre-wrap;word-wrap:break-word;
+    min-height:320px;max-height:65vh;overflow-y:auto;
+    color:var(--text);
   }
-  .chip:hover { border-color: var(--accent); }
-  .chip.active {
-    background: var(--chip-active); color: white; border-color: var(--chip-active);
+  body.dark .preview{background:var(--ink)}
+  .preview-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+
+  .btn{
+    padding:10px 16px;border-radius:var(--radius);border:1px solid transparent;
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    cursor:pointer;transition:all .15s;
   }
-  .section-divider {
-    height: 1px; background: var(--border); margin: 18px 0;
+  .btn-primary{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+  body.dark .btn-primary{color:var(--ink)}
+  .btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+  .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border-strong)}
+  .btn-secondary:hover{border-color:var(--accent);background:var(--surface-2)}
+
+  .footer-note{
+    color:var(--muted);font-size:12px;margin-top:16px;font-family:var(--body);
   }
-  .preview-wrap {
-    position: sticky; top: 20px;
+  .footer-note em{
+    font-family:var(--serif);font-style:italic;font-size:13px;color:var(--accent-2);
   }
-  .preview {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    font-family: "SF Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
-    font-size: 13px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    min-height: 300px;
-    max-height: 65vh;
-    overflow-y: auto;
-    line-height: 1.55;
+  body.dark .footer-note em{color:var(--sage)}
+
+  /* ---------- Templates ---------- */
+  .templates-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+  .templates-bar select{flex:1;min-width:200px}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+    background:var(--ok);color:var(--paper);padding:10px 20px;
+    border-radius:var(--radius);
+    font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:var(--shadow);
   }
-  .preview-actions {
-    display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;
+  body.dark .toast{color:var(--ink)}
+  .toast.show{opacity:1}
+
+  /* ---------- Misc ---------- */
+  .pill{
+    display:inline-block;padding:2px 7px;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);
+    font-family:var(--sans);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin-left:6px;font-weight:500;
   }
-  .btn {
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: none;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
+  details{
+    background:var(--bg);border:1px solid var(--border);
+    border-radius:var(--radius);padding:12px 14px;margin-bottom:16px;
   }
-  .btn-primary {
-    background: var(--accent); color: white;
+  body.dark details{background:var(--surface-2)}
+  details summary{
+    cursor:pointer;font-family:var(--sans);font-weight:500;font-size:12px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
   }
-  .btn-primary:hover { background: var(--accent-2); }
-  .btn-secondary {
-    background: var(--panel); color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-secondary:hover { background: var(--panel-2); }
-  .footer-note {
-    color: var(--muted); font-size: 12px; margin-top: 14px;
-  }
-  .templates-bar {
-    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-    margin-bottom: 14px;
-  }
-  .templates-bar select {
-    flex: 1; min-width: 180px;
-  }
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: var(--ok); color: #0a0c10; padding: 10px 18px;
-    border-radius: 999px; font-weight: 500; font-size: 13px;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-    box-shadow: var(--shadow);
-  }
-  .toast.show { opacity: 1; }
-  .pill {
-    display: inline-block; padding: 2px 8px;
-    background: var(--chip); border-radius: 999px;
-    font-size: 11px; color: var(--muted); margin-left: 6px;
-  }
-  details {
-    background: var(--panel-2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px 12px; margin-bottom: 16px;
-  }
-  details summary {
-    cursor: pointer; font-weight: 500; font-size: 13px;
-    color: var(--muted);
-  }
-  details[open] summary { margin-bottom: 10px; color: var(--text); }
-  .count {
-    font-size: 11px; color: var(--muted); float: right;
+  details[open] summary{margin-bottom:12px;color:var(--text)}
+  .count{
+    font-family:var(--mono);font-size:11px;color:var(--muted);float:right;
+    letter-spacing:0;text-transform:none;
   }
 </style>
 </head>
@@ -209,16 +254,17 @@
 <div class="wrap">
 
   <header>
-    <div>
-      <h1><span class="dot"></span> Claude Prompt Builder</h1>
-      <div class="sub">A prompt scaffolder for marketing work (and life) — built for Max</div>
+    <div class="title-block">
+      <p class="eyebrow"><span class="mark" aria-hidden="true"></span> Tool · Prompt Builder</p>
+      <h1>Prompt Builder.</h1>
+      <p class="sub">A scaffolder for better Claude prompts — marketing, life, and everything in between.</p>
     </div>
     <div class="controls">
-      <div class="toggle" id="modeToggle">
-        <button data-mode="work" class="active">Work</button>
-        <button data-mode="personal">Personal</button>
+      <div class="toggle" id="modeToggle" role="tablist" aria-label="Mode">
+        <button data-mode="work" class="active" role="tab">Work</button>
+        <button data-mode="personal" role="tab">Personal</button>
       </div>
-      <button class="icon-btn" id="themeToggle" title="Toggle light/dark">Theme</button>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark theme">Theme</button>
     </div>
   </header>
 
@@ -228,14 +274,14 @@
     <div class="panel">
 
       <div class="templates-bar">
-        <select id="templateSelect">
-          <option value="">— Load a template —</option>
+        <select id="templateSelect" aria-label="Load a template">
+          <option value="">Load a template…</option>
         </select>
-        <button class="btn btn-secondary" id="saveTemplateBtn">Save current as template</button>
+        <button class="btn btn-secondary" id="saveTemplateBtn">Save as template</button>
         <button class="btn btn-secondary" id="deleteTemplateBtn">Delete</button>
       </div>
 
-      <h2>1. Role — "You are a…"</h2>
+      <h2><span class="n">1</span> Role</h2>
       <div class="field">
         <label for="role">Persona Claude should adopt</label>
         <select id="role"></select>
@@ -247,7 +293,7 @@
 
       <div class="section-divider"></div>
 
-      <h2>2. Task — What do you need?</h2>
+      <h2><span class="n">2</span> Task</h2>
       <div class="row">
         <div class="field">
           <label for="taskType">Task type</label>
@@ -259,13 +305,13 @@
         </div>
       </div>
       <div class="field">
-        <label for="topic">Topic / subject <span class="pill">required</span></label>
-        <textarea id="topic" placeholder="e.g. Spring campaign for our new product range targeting UK e-commerce shoppers aged 25–40"></textarea>
+        <label for="topic">Topic / subject <span class="pill">Required</span></label>
+        <textarea id="topic" placeholder="e.g. Spring campaign for our new product range, targeting UK e-commerce shoppers aged 25–40"></textarea>
       </div>
 
       <div class="section-divider"></div>
 
-      <h2>3. Audience & Tone</h2>
+      <h2><span class="n">3</span> Audience &amp; Tone</h2>
       <div class="row">
         <div class="field">
           <label for="audience">Target audience</label>
@@ -281,13 +327,13 @@
         <div class="chips" id="toneChips"></div>
       </div>
       <div class="field">
-        <label>Style & voice <span class="hint">Pick up to 3</span></label>
+        <label>Style &amp; voice <span class="hint">Pick up to 3</span></label>
         <div class="chips" id="styleChips"></div>
       </div>
 
       <div class="section-divider"></div>
 
-      <h2>4. Structure</h2>
+      <h2><span class="n">4</span> Structure</h2>
       <div class="row">
         <div class="field">
           <label for="length">Length</label>
@@ -316,25 +362,25 @@
 
       <div class="section-divider"></div>
 
-      <h2>5. Context & Details</h2>
+      <h2><span class="n">5</span> Context &amp; Details</h2>
       <div class="field">
-        <label for="context">Background context <span class="hint">Give Claude the "why" — company, product, market, prior work, etc.</span></label>
-        <textarea id="context" placeholder="e.g. We are a mid-market e-commerce brand in the UK home & lifestyle space. Our customers are 25–45, shop mostly on mobile, and value design, sustainability and fast delivery. Our edge is curated product and strong brand storytelling..."></textarea>
+        <label for="context">Background context <span class="hint">Give Claude the “why” — company, product, market, prior work.</span></label>
+        <textarea id="context" placeholder="e.g. We're a mid-market e-commerce brand in the UK home &amp; lifestyle space. Our customers are 25–45, shop mostly on mobile, and value design, sustainability and fast delivery. Our edge is curated product and strong brand storytelling..."></textarea>
       </div>
       <div class="field">
-        <label for="goal">Goal / success criteria <span class="hint">What does "good" look like?</span></label>
-        <textarea id="goal" placeholder="e.g. A campaign narrative I can present to the exec team that clearly ties to Q3 revenue and new-customer-acquisition targets."></textarea>
+        <label for="goal">Goal / success criteria <span class="hint">What does “good” look like?</span></label>
+        <textarea id="goal" placeholder="e.g. A campaign narrative I can present to the exec team that clearly ties to Q3 revenue and new-customer acquisition."></textarea>
       </div>
 
       <details>
-        <summary>Advanced — examples, constraints, step-by-step, etc.</summary>
-        <div class="field" style="margin-top:10px;">
-          <label for="examples">Examples to follow <span class="hint">Paste any reference copy, past campaigns, or "like this…" examples</span></label>
+        <summary>Advanced — examples, constraints, reasoning, boosters</summary>
+        <div class="field" style="margin-top:14px;">
+          <label for="examples">Examples to follow <span class="hint">Paste any reference copy, past campaigns, or “like this…” examples.</span></label>
           <textarea id="examples" placeholder="e.g. Follow the tone of our last spring campaign email: …"></textarea>
         </div>
         <div class="field">
           <label for="constraints">Constraints / things to avoid</label>
-          <textarea id="constraints" placeholder="e.g. No buzzwords like 'synergy' or 'unlock'. Keep it on-brand. Avoid discounts or pricing claims."></textarea>
+          <textarea id="constraints" placeholder="e.g. No buzzwords like ‘synergy’ or ‘unlock’. Keep it on-brand. Avoid discounts or pricing claims."></textarea>
         </div>
         <div class="field">
           <label>Reasoning mode</label>
@@ -360,7 +406,7 @@
           <button class="btn btn-secondary" id="downloadBtn">Download .txt</button>
         </div>
         <div class="footer-note" id="footerNote">
-          Tip: paste the prompt into claude.ai, the Claude desktop app, or Cowork. Templates are saved in your browser only.
+          Paste the prompt into claude.ai, the Claude desktop app, or Cowork. Templates are saved in your browser only.  <em>Do the work. Let the work do the talking.</em>
         </div>
       </div>
     </div>
@@ -372,7 +418,7 @@
 
 <script>
 /* =========================================================
-   Option banks — customized for a Marketing Director / CMO
+   Option banks — tuned for a Marketing Director / CMO
    ========================================================= */
 const OPTIONS = {
   work: {
@@ -570,7 +616,9 @@ function buildChips(containerId, arr, stateKey, limitKey){
   arr.forEach(v => {
     const chip = document.createElement("span");
     chip.className = "chip"; chip.textContent = v;
-    chip.addEventListener("click", () => {
+    chip.setAttribute("role", "button");
+    chip.setAttribute("tabindex", "0");
+    const toggle = () => {
       const idx = state[stateKey].indexOf(v);
       if (idx >= 0) { state[stateKey].splice(idx,1); chip.classList.remove("active"); }
       else {
@@ -579,6 +627,10 @@ function buildChips(containerId, arr, stateKey, limitKey){
         state[stateKey].push(v); chip.classList.add("active");
       }
       updatePreview();
+    };
+    chip.addEventListener("click", toggle);
+    chip.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
     });
     c.appendChild(chip);
   });
@@ -685,12 +737,10 @@ function buildPrompt(){
   if (state.boosters.length) extras.push(...state.boosters.map(b => "- " + b));
   if (extras.length) parts.push(`# Instructions\n${extras.join("\n")}`);
 
-  // Mode flavoring
   if (parts.length === 0) {
     return "Your prompt will appear here as you fill out the form.";
   }
 
-  // Closing nudge
   const closing = state.mode === "work"
     ? "Please produce the output now. If anything above is ambiguous, ask me one clarifying question before proceeding."
     : "Please produce the output now. Keep it friendly and practical. Ask me a clarifying question if anything is unclear.";
@@ -773,7 +823,7 @@ function saveTemplates(t){ localStorage.setItem(STORAGE_KEY, JSON.stringify(t));
 function refreshTemplateSelect(){
   const sel = el("templateSelect");
   const templates = getTemplates();
-  sel.innerHTML = '<option value="">— Load a template —</option>';
+  sel.innerHTML = '<option value="">Load a template…</option>';
   Object.keys(templates).sort().forEach(name => {
     const o = document.createElement("option"); o.value = name; o.textContent = name;
     sel.appendChild(o);
@@ -798,22 +848,18 @@ function currentSnapshot(){
   };
 }
 function applySnapshot(snap){
-  // mode
   state.mode = snap.mode || "work";
   document.querySelectorAll("#modeToggle button").forEach(b => {
     b.classList.toggle("active", b.dataset.mode === state.mode);
   });
   populateModeOptions();
-  // inputs
   Object.entries(snap.inputs || {}).forEach(([k,v]) => {
     if (el(k)) el(k).value = v;
   });
-  // chips
   state.tones = [...(snap.chips?.tones || [])];
   state.styles = [...(snap.chips?.styles || [])];
   state.reasoning = [...(snap.chips?.reasoning || [])];
   state.boosters = [...(snap.chips?.boosters || [])];
-  // refresh chip active state
   document.querySelectorAll("#toneChips .chip").forEach(c => c.classList.toggle("active", state.tones.includes(c.textContent)));
   document.querySelectorAll("#styleChips .chip").forEach(c => c.classList.toggle("active", state.styles.includes(c.textContent)));
   document.querySelectorAll("#reasoningChips .chip").forEach(c => c.classList.toggle("active", state.reasoning.includes(c.textContent)));
@@ -931,25 +977,28 @@ function seedStartersIfEmpty(){
 }
 
 /* =========================================================
-   Theme
+   Theme — Paper by default, Dark via toggle.
+   Storage key preserved: cpb_theme_v1
+   Old "light" value = paper (default, no class). "dark" value = dark class.
    ========================================================= */
 function wireTheme(){
   const saved = localStorage.getItem(THEME_KEY);
-  if (saved === "light") document.body.classList.add("light");
+  if (saved === "dark") document.body.classList.add("dark");
   el("themeToggle").addEventListener("click", () => {
-    document.body.classList.toggle("light");
-    localStorage.setItem(THEME_KEY, document.body.classList.contains("light") ? "light" : "dark");
+    document.body.classList.toggle("dark");
+    localStorage.setItem(THEME_KEY, document.body.classList.contains("dark") ? "dark" : "paper");
   });
 }
 
 /* =========================================================
-   Go!
+   Go.
    ========================================================= */
 initUI();
 wireInputs();
 wireMode();
 wireActions();
 wireTheme();
+wireTemplates();
 seedStartersIfEmpty();
 refreshTemplateSelect();
 updatePreview();

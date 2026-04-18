@@ -1,14 +1,14 @@
 {
-  "subtitle": "A personal hub of HTML tools.",
-  "updated": "2026-04-17",
+  "subtitle": "A personal hub of HTML tools built with Claude.",
+  "updated": "2026-04-18",
   "tools": [
     {
       "id": "prompt-builder",
       "title": "Prompt Builder",
-      "description": "Scaffolder for building high-quality prompts. Role picker, tone/style chips, live preview, save templates.",
+      "description": "Scaffolder for better Claude prompts. Role picker, tone and style chips, live preview, saved templates.",
       "path": "tools/prompt-builder.html",
       "emoji": "✍️",
-      "tags": ["work", "personal", "marketing"],
+      "tags": ["work", "personal", "marketing", "builder"],
       "added": "2026-04-17"
     }
   ]
