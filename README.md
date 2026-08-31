@@ -6,12 +6,31 @@ Personal hub of HTML tools built with Claude, hosted on Cloudflare Pages.
 
 ```
 /
-├── index.html       ← landing page (card grid)
+├── index.html       ← profile / landing page
+├── robots.txt       ← crawl policy (keeps /tools/ out of search engines)
+├── _headers         ← X-Robots-Tag: noindex on /tools/*
 ├── tools.json       ← manifest of tools — edit this to add/remove cards
-├── tools/           ← individual HTML tools
+├── tools/           ← individual HTML tools (private, see below)
+│   ├── index.html   ← tools card grid
 │   └── prompt-builder.html
 └── README.md
 ```
+
+## The tools area is private
+
+`/tools/` is deliberately unlisted:
+
+- no link to it from the profile page (navigation or footer),
+- `<meta name="robots" content="noindex, nofollow, ...">` on every page under `tools/`,
+- `X-Robots-Tag: noindex` served via `_headers`,
+- `Disallow: /tools/` in `robots.txt`, including the common AI crawlers.
+
+It is **unlisted, not secured** — anyone who knows the URL can still open it. If a
+tool ever needs to be genuinely private, put it behind Cloudflare Access rather
+than relying on these signals.
+
+Any new tool added under `tools/` should carry the same `<meta name="robots">`
+tags as the existing ones.
 
 ## Publishing a new tool (with GitHub Desktop)
 

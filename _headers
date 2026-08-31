@@ -1,0 +1,7 @@
+# Keep the tools area out of search indexes and AI crawlers, belt-and-braces
+# alongside robots.txt and the per-page <meta name="robots"> tags.
+/tools/*
+  X-Robots-Tag: noindex, nofollow, noarchive, noimageindex
+
+/tools.json
+  X-Robots-Tag: noindex, nofollow

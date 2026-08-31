@@ -1,0 +1,23 @@
+User-agent: *
+Disallow: /tools/
+Disallow: /tools.json
+
+# The tools area is private: unlinked, noindex, and not for crawling
+# (search engines or AI/LLM scrapers).
+User-agent: GPTBot
+Disallow: /tools/
+
+User-agent: ClaudeBot
+Disallow: /tools/
+
+User-agent: Google-Extended
+Disallow: /tools/
+
+User-agent: CCBot
+Disallow: /tools/
+
+User-agent: PerplexityBot
+Disallow: /tools/
+
+User-agent: Bytespider
+Disallow: /tools/
