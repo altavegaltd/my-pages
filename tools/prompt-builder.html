@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
 <meta name="googlebot" content="noindex, nofollow" />
-<title>Prompt Builder — Max Cartwright-Wilson</title>
+<title>Prompt Builder - Max Cartwright-Wilson</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
     --graphite:#1C1E1A;
     --ink:#11130F;
 
-    /* Semantic — Paper (default) */
+    /* Semantic - Paper (default) */
     --bg:var(--paper);
     --surface:#ffffff;
     --surface-2:var(--bone);
@@ -259,7 +259,7 @@
     <div class="title-block">
       <p class="eyebrow"><span class="mark" aria-hidden="true"></span> Tool · Prompt Builder</p>
       <h1>Prompt Builder.</h1>
-      <p class="sub">A scaffolder for better Claude prompts — marketing, life, and everything in between.</p>
+      <p class="sub">A scaffolder for better Claude prompts - marketing, life, and everything in between.</p>
     </div>
     <div class="controls">
       <div class="toggle" id="modeToggle" role="tablist" aria-label="Mode">
@@ -366,7 +366,7 @@
 
       <h2><span class="n">5</span> Context &amp; Details</h2>
       <div class="field">
-        <label for="context">Background context <span class="hint">Give Claude the “why” — company, product, market, prior work.</span></label>
+        <label for="context">Background context <span class="hint">Give Claude the “why” - company, product, market, prior work.</span></label>
         <textarea id="context" placeholder="e.g. We're a mid-market e-commerce brand in the UK home &amp; lifestyle space. Our customers are 25–45, shop mostly on mobile, and value design, sustainability and fast delivery. Our edge is curated product and strong brand storytelling..."></textarea>
       </div>
       <div class="field">
@@ -375,7 +375,7 @@
       </div>
 
       <details>
-        <summary>Advanced — examples, constraints, reasoning, boosters</summary>
+        <summary>Advanced - examples, constraints, reasoning, boosters</summary>
         <div class="field" style="margin-top:14px;">
           <label for="examples">Examples to follow <span class="hint">Paste any reference copy, past campaigns, or “like this…” examples.</span></label>
           <textarea id="examples" placeholder="e.g. Follow the tone of our last spring campaign email: …"></textarea>
@@ -420,12 +420,12 @@
 
 <script>
 /* =========================================================
-   Option banks — tuned for a Marketing Director / CMO
+   Option banks - tuned for a Marketing Director / CMO
    ========================================================= */
 const OPTIONS = {
   work: {
     roles: [
-      "— Select a role —",
+      "- Select a role -",
       "Senior marketing strategist",
       "Chief Marketing Officer (CMO)",
       "E-commerce marketing director",
@@ -450,14 +450,14 @@ const OPTIONS = {
       "Board advisor / McKinsey-style consultant"
     ],
     tasks: [
-      "— Select a task —",
+      "- Select a task -",
       "Write", "Edit / improve", "Brainstorm", "Analyse", "Summarise",
       "Critique / red-team", "Compare options", "Translate",
       "Build a framework", "Create an outline", "Draft a plan",
       "Answer a question", "Role-play a conversation", "Research"
     ],
     outputs: [
-      "— Select an output —",
+      "- Select an output -",
       "Campaign brief", "Go-to-market plan", "Positioning statement",
       "Messaging framework", "Value proposition", "Tagline options",
       "Email (single)", "Email sequence / nurture", "Cold outreach email",
@@ -472,7 +472,7 @@ const OPTIONS = {
       "Performance post-mortem", "Content calendar", "SEO brief"
     ],
     audiences: [
-      "— Select an audience —",
+      "- Select an audience -",
       "External: prospective customers (ICP)",
       "External: existing customers",
       "External: lapsed / win-back customers",
@@ -484,7 +484,7 @@ const OPTIONS = {
   },
   personal: {
     roles: [
-      "— Select a role —",
+      "- Select a role -",
       "Thoughtful friend who is great at writing",
       "Personal coach",
       "Financial planner (general guidance only)",
@@ -503,14 +503,14 @@ const OPTIONS = {
       "Debate partner / devil's advocate"
     ],
     tasks: [
-      "— Select a task —",
+      "- Select a task -",
       "Write", "Edit / improve", "Brainstorm", "Explain", "Summarise",
       "Plan", "Decide between options", "Translate",
       "Answer a question", "Role-play a conversation", "Research",
       "Practise a conversation", "Give feedback"
     ],
     outputs: [
-      "— Select an output —",
+      "- Select an output -",
       "Personal email", "Text message / iMessage",
       "Letter", "Thank-you note", "Birthday message",
       "Journal prompt", "To-do list", "Weekly plan",
@@ -523,7 +523,7 @@ const OPTIONS = {
       "Resume / CV section", "Cover letter", "LinkedIn summary"
     ],
     audiences: [
-      "— Select an audience —",
+      "- Select an audience -",
       "Just me",
       "Family member",
       "Spouse / partner",
@@ -662,7 +662,7 @@ function initUI() {
    Preview generation
    ========================================================= */
 function val(id){ return el(id).value.trim(); }
-function isDefault(v){ return !v || v.startsWith("— "); }
+function isDefault(v){ return !v || v.startsWith("- "); }
 
 function buildPrompt(){
   const parts = [];
@@ -702,7 +702,7 @@ function buildPrompt(){
   if (!isDefault(audience) || audienceCustom) {
     let a = "";
     if (!isDefault(audience)) a += audience;
-    if (audienceCustom) a += (a ? " — " : "") + audienceCustom;
+    if (audienceCustom) a += (a ? " - " : "") + audienceCustom;
     parts.push(`# Audience\n${a}`);
   }
 
@@ -791,7 +791,7 @@ function wireActions(){
     try {
       await navigator.clipboard.writeText(el("preview").textContent);
       toast("Copied to clipboard");
-    } catch { toast("Copy failed — select manually"); }
+    } catch { toast("Copy failed - select manually"); }
   });
   el("openClaudeBtn").addEventListener("click", () => {
     window.open("https://claude.ai/new", "_blank");
@@ -900,7 +900,7 @@ function seedStartersIfEmpty(){
   const t = getTemplates();
   if (Object.keys(t).length > 0) return;
 
-  t["[Work] Campaign brief — new product launch"] = {
+  t["[Work] Campaign brief - new product launch"] = {
     mode: "work",
     inputs: {
       role: "Senior marketing strategist", roleCustom: "",
@@ -908,7 +908,7 @@ function seedStartersIfEmpty(){
       topic: "Launch campaign for our new e-commerce product range. Replace with product, target shopper, season and timing.",
       audience: "External: prospective customers (ICP)", audienceCustom: "",
       length: "One-pager", structure: "Headings + short paragraphs", language: "English (UK)",
-      context: "Brand, product, category, customer insight, competitive edge and prior campaign learnings — fill in.",
+      context: "Brand, product, category, customer insight, competitive edge and prior campaign learnings - fill in.",
       goal: "A campaign brief I can hand to the team and agency to kick off execution.",
       examples: "", constraints: "No generic buzzwords. Tie everything back to revenue and customer acquisition impact."
     },
@@ -935,7 +935,7 @@ function seedStartersIfEmpty(){
     inputs: {
       role: "Chief Marketing Officer (CMO)", roleCustom: "",
       taskType: "Write", outputFormat: "LinkedIn post",
-      topic: "Share a contrarian take on a current trend in marketing or e-commerce — swap in the trend.",
+      topic: "Share a contrarian take on a current trend in marketing or e-commerce - swap in the trend.",
       audience: "", audienceCustom: "Marketing & growth leaders on LinkedIn",
       length: "LinkedIn-post length (~150–250 words)", structure: "Hook → body → CTA", language: "English (UK)",
       context: "My POV: …  Evidence: …  I want comments and discussion, not just likes.",
@@ -965,7 +965,7 @@ function seedStartersIfEmpty(){
     inputs: {
       role: "Thoughtful friend who is great at writing", roleCustom: "",
       taskType: "Write", outputFormat: "Personal email",
-      topic: "I need to send a difficult email — describe the situation, the recipient, and the outcome you want.",
+      topic: "I need to send a difficult email - describe the situation, the recipient, and the outcome you want.",
       audience: "Friend", audienceCustom: "",
       length: "Short (1 paragraph, ~50–100 words)", structure: "Prose (no bullets/headers)", language: "English (UK)",
       context: "Relationship context, history, tone they'll expect from me.",
@@ -979,7 +979,7 @@ function seedStartersIfEmpty(){
 }
 
 /* =========================================================
-   Theme — Paper by default, Dark via toggle.
+   Theme - Paper by default, Dark via toggle.
    Storage key preserved: cpb_theme_v1
    Old "light" value = paper (default, no class). "dark" value = dark class.
    ========================================================= */
